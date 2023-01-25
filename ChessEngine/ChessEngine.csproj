@@ -32,6 +32,26 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,6 +63,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChessBoard.cs" />
+    <Compile Include="ChessModels\AReactionChessModel.cs" />
+    <Compile Include="ChessModels\CaptureReactionChessModel.cs" />
+    <Compile Include="ChessModels\IPromoteActionChessModel.cs" />
+    <Compile Include="ChessModels\IReactionChessModel.cs" />
+    <Compile Include="ChessModels\IChessModel.cs" />
+    <Compile Include="ChessModels\IActionChessModel.cs" />
+    <Compile Include="ChessModels\Monitors\ActionChessModelMonitor.cs" />
+    <Compile Include="ChessModels\Monitors\IChessMoveInfluence.cs" />
+    <Compile Include="ChessModels\IShiftActionChessModel.cs" />
+    <Compile Include="ChessModels\Monitors\PromoteChessMoveInfluence.cs" />
+    <Compile Include="ChessModels\Monitors\ReactionChessModelMonitor.cs" />
+    <Compile Include="ChessModels\Monitors\ShiftChessMoveInfluence.cs" />
+    <Compile Include="ChessModels\PawnShiftActionChessModel.cs" />
+    <Compile Include="ChessModels\PromoteActionChessModelAgreggator.cs" />
+    <Compile Include="ChessModels\PromoteActionChessModel.cs" />
+    <Compile Include="ChessModels\ShiftActionChessModel.cs" />
+    <Compile Include="ChessModels\ShiftActionChessModelAgreggator.cs" />
+    <Compile Include="ChessPiece.cs" />
+    <Compile Include="ChessPieceCell.cs" />
+    <Compile Include="ChessPieceTemplate.cs" />
+    <Compile Include="ChessPieceFactory.cs" />
+    <Compile Include="ChessPieceType.cs" />
+    <Compile Include="ChessTurn.cs" />
+    <Compile Include="IChessPiece.cs" />
+    <Compile Include="Maths\ChessPiecePosition.cs" />
+    <Compile Include="Moves\AChessPieceMove.cs" />
+    <Compile Include="Moves\IChessPieceMoveVisistor.cs" />
+    <Compile Include="Moves\ShiftChessPieceMove.cs" />
+    <Compile Include="Moves\ChessPieceMovesContainer.cs" />
+    <Compile Include="Moves\IChessPieceMove.cs" />
+    <Compile Include="Moves\KillChessPieceMove.cs" />
+    <Compile Include="Moves\PromoteChessPieceMove.cs" />
+    <Compile Include="Players\APlayer.cs" />
+    <Compile Include="Players\IPlayer.cs" />
+    <Compile Include="Players\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
