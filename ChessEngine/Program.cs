@@ -35,8 +35,8 @@ namespace ChessEngine
             chessBoard.InitGame();
 
             // Players
-            Player player1 = new Player("White");
-            Player player2 = new Player("Black");
+            Player player1 = new Player("White", 0, -1);
+            Player player2 = new Player("Black", 0, 1);
 
             chessBoard.AddPlayer(player1);
             chessBoard.AddPlayer(player2);

@@ -13,6 +13,16 @@ namespace ChessEngine.Players
             get;
         }
 
+        int XDirection
+        {
+            get;
+        }
+
+        int YDirection
+        {
+            get;
+        }
+
         void AddChessPieceToPlayer(ChessPiece chessPieceToAdd);
 
         void RemoveChessPieceOfPlayer(ChessPiece chessPieceToRemove);

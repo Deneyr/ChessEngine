@@ -10,10 +10,10 @@ namespace ChessEngine.ChessModels
 {
     internal class ShiftActionChessModel : IShiftActionChessModel
     {
-        private int xShift;
-        private int yShift;
+        protected int xShift;
+        protected int yShift;
 
-        private int numberCellrange;
+        protected int numberCellrange;
 
         public ShiftActionChessModel(int xShift, int yShift, int numberCellrange)
         {
@@ -42,21 +42,34 @@ namespace ChessEngine.ChessModels
         {
             List<ChessPieceMovesContainer> resultChessPieceMoves = new List<ChessPieceMovesContainer>();
 
-            int maxStep = chessBoard.RayTrace(concernedChessPiece.ChessPiecePosition, this.xShift, this.yShift, this.GetNumberCellrange(chessBoard, concernedChessPiece), out ChessPiece chessPieceTouched);
-
-            if(chessPieceTouched != null && chessPieceTouched.Owner != concernedChessPiece.Owner)
+            if (chessBoard.IsTurnFirstMove)
             {
-                ++maxStep;
-            }
+                int maxStep = chessBoard.RayTrace(
+                    concernedChessPiece.ChessPiecePosition,
+                    this.GetXShift(concernedChessPiece),
+                    this.GetYShift(concernedChessPiece),
+                    this.GetNumberCellrange(chessBoard, concernedChessPiece),
+                    out ChessPiece chessPieceTouched);
 
-            for(int i = 1; i <= maxStep; i++)
-            {
-                ChessPiecePosition toPosition = new ChessPiecePosition(concernedChessPiece.ChessPiecePosition.X + (i * this.xShift), concernedChessPiece.ChessPiecePosition.Y + (i * this.yShift));
+                if (chessPieceTouched != null && chessPieceTouched.Owner != concernedChessPiece.Owner)
+                {
+                    ++maxStep;
+                }
 
-                ChessPieceMovesContainer chessPieceMovesContainer = new ChessPieceMovesContainer(concernedChessPiece, true);
-                chessPieceMovesContainer.ChessPieceMoves.Add(new ShiftChessPieceMove(concernedChessPiece, concernedChessPiece.ChessPiecePosition, toPosition));
+                for (int i = 1; i <= maxStep; i++)
+                {
+                    ChessPiecePosition toPosition = new ChessPiecePosition(
+                        concernedChessPiece.ChessPiecePosition.X + (i * this.GetXShift(concernedChessPiece)),
+                        concernedChessPiece.ChessPiecePosition.Y + (i * this.GetYShift(concernedChessPiece)));
 
-                resultChessPieceMoves.Add(chessPieceMovesContainer);
+                    if (this.InternalIsMoveAllowed(chessBoard, concernedChessPiece, toPosition))
+                    {
+                        ChessPieceMovesContainer chessPieceMovesContainer = new ChessPieceMovesContainer(concernedChessPiece, this.IsEndTurnMove(chessBoard, concernedChessPiece));
+                        chessPieceMovesContainer.ChessPieceMoves.Add(new ShiftChessPieceMove(concernedChessPiece, concernedChessPiece.ChessPiecePosition, toPosition));
+
+                        resultChessPieceMoves.Add(chessPieceMovesContainer);
+                    }
+                }
             }
 
             return resultChessPieceMoves;
@@ -64,23 +77,31 @@ namespace ChessEngine.ChessModels
 
         public bool IsMoveAllowed(ChessBoard chessBoard, ChessPiece concernedChessPiece, ChessPiecePosition toPosition)
         {
-            if (chessBoard.IsPositionOnChessBoard(toPosition))
+            if (chessBoard.IsTurnFirstMove)
             {
-                if (this.IsInRange(concernedChessPiece.ChessPiecePosition, toPosition, out int nbStepToReach)
-                    && nbStepToReach > 0
-                    && nbStepToReach <= this.GetNumberCellrange(chessBoard, concernedChessPiece))
+                if (this.InternalIsMoveAllowed(chessBoard, concernedChessPiece, toPosition) && chessBoard.IsPositionOnChessBoard(toPosition))
                 {
-                    int maxStep = chessBoard.RayTrace(concernedChessPiece.ChessPiecePosition, this.xShift, this.yShift, nbStepToReach, out ChessPiece chessPieceTouched);
+                    if (this.IsInRange(concernedChessPiece, concernedChessPiece.ChessPiecePosition, toPosition, out int nbStepToReach)
+                        && nbStepToReach > 0
+                        && nbStepToReach <= this.GetNumberCellrange(chessBoard, concernedChessPiece))
+                    {
+                        int maxStep = chessBoard.RayTrace(
+                            concernedChessPiece.ChessPiecePosition,
+                            this.GetXShift(concernedChessPiece),
+                            this.GetYShift(concernedChessPiece),
+                            nbStepToReach,
+                            out ChessPiece chessPieceTouched);
 
-                    return maxStep == nbStepToReach
-                        || (maxStep == nbStepToReach - 1 && chessPieceTouched != null && chessPieceTouched.Owner != concernedChessPiece.Owner);
+                        return maxStep == nbStepToReach
+                            || (maxStep == nbStepToReach - 1 && chessPieceTouched != null && chessPieceTouched.Owner != concernedChessPiece.Owner);
+                    }
                 }
             }
 
             return false;
         }
 
-        private bool IsInRange(ChessPiecePosition fromPosition, ChessPiecePosition toPosition, out int nbStepToReach)
+        private bool IsInRange(ChessPiece concernedChessPiece, ChessPiecePosition fromPosition, ChessPiecePosition toPosition, out int nbStepToReach)
         {
             nbStepToReach = 0;
 
@@ -88,6 +109,9 @@ namespace ChessEngine.ChessModels
             {
                 return true;
             }
+
+            int xShift = this.GetXShift(concernedChessPiece);
+            int yShift = this.GetYShift(concernedChessPiece);
 
             int xDiff = toPosition.X - fromPosition.X;
             int yDiff = toPosition.Y - fromPosition.Y;
@@ -130,9 +154,29 @@ namespace ChessEngine.ChessModels
             return false;
         }
 
+        protected virtual bool InternalIsMoveAllowed(ChessBoard chessBoard, ChessPiece concernedChessPiece, ChessPiecePosition toPosition)
+        {
+            return true;
+        }
+
+        protected virtual int GetXShift(ChessPiece concernedChessPiece)
+        {
+            return this.xShift;
+        }
+
+        protected virtual int GetYShift(ChessPiece concernedChessPiece)
+        {
+            return this.yShift;
+        }
+
         protected virtual int GetNumberCellrange(ChessBoard chessBoard, ChessPiece concernedChessPiece)
         {
             return this.numberCellrange;
+        }
+
+        protected virtual bool IsEndTurnMove(ChessBoard chessBoard, ChessPiece concernedChessPiece)
+        {
+            return true;
         }
     }
 }

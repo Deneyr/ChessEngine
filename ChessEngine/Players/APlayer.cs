@@ -14,9 +14,24 @@ namespace ChessEngine.Players
             private set;
         }
 
-        public APlayer()
+        public int XDirection
+        {
+            get;
+            private set;
+        }
+
+        public int YDirection
+        {
+            get;
+            private set;
+        }
+
+        public APlayer(int xDirection, int yDirection)
         {
             this.ChessPiecesOwned = new List<ChessPiece>();
+
+            this.XDirection = xDirection;
+            this.YDirection = yDirection;
         }
 
         public virtual void AddChessPieceToPlayer(ChessPiece chessPieceToAdd)

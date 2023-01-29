@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessEngine.Maths;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,8 @@ namespace ChessEngine.ChessModels
 {
     internal class PawnShiftActionChessModel : ShiftActionChessModel
     {
-        public PawnShiftActionChessModel() : base(0, -1, 1)
+        public PawnShiftActionChessModel() 
+            : base(1, 1, 1)
         {
         }
 
@@ -21,6 +23,28 @@ namespace ChessEngine.ChessModels
             }
 
             return result;
+        }
+
+        protected override bool InternalIsMoveAllowed(ChessBoard chessBoard, ChessPiece concernedChessPiece, ChessPiecePosition toPosition)
+        {
+            ChessPiece chessPiece = chessBoard.GetChessPieceAt(toPosition);
+
+            return chessPiece == null;
+        }
+
+        protected override int GetXShift(ChessPiece concernedChessPiece)
+        {
+            return this.xShift * concernedChessPiece.Owner.XDirection;
+        }
+
+        protected override int GetYShift(ChessPiece concernedChessPiece)
+        {
+            return this.yShift * concernedChessPiece.Owner.YDirection;
+        }
+
+        protected override bool IsEndTurnMove(ChessBoard chessBoard, ChessPiece concernedChessPiece)
+        {
+            return PromoteActionChessModel.IsInPromoteArea(chessBoard, concernedChessPiece);
         }
     }
 }

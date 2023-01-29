@@ -16,12 +16,12 @@ namespace ChessEngine.ChessModels
             this.promoteActionChessModels = new List<IPromoteActionChessModel>();
         }
 
-        public void AddShiftActionChessModel(IPromoteActionChessModel chessModelToAdd)
+        public void AddPromoteActionChessModel(IPromoteActionChessModel chessModelToAdd)
         {
             this.promoteActionChessModels.Add(chessModelToAdd);
         }
 
-        public void RemoveShiftActionChessModel(IPromoteActionChessModel chessModelToRemove)
+        public void RemovePromoteActionChessModel(IPromoteActionChessModel chessModelToRemove)
         {
             this.promoteActionChessModels.Remove(chessModelToRemove);
         }

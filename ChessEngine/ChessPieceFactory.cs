@@ -66,6 +66,19 @@ namespace ChessEngine
             chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new ShiftActionChessModel(1, -2, 1));
             chessPieceTemplate.ReactionModelMonitor.AddReactionChessModel(new CaptureReactionChessModel());
             this.chessPieceLibrary.Add(chessPieceTemplate.ChessPieceType, chessPieceTemplate);
+
+            // Pawn template
+            chessPieceTemplate = new ChessPieceTemplate();
+            chessPieceTemplate.ChessPieceType = ChessPieceType.PAWN;
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new PawnShiftActionChessModel());
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new PawnTakeShiftActionChessModel(-1));
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new PawnTakeShiftActionChessModel(1));
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new EnPassantShiftActionChessModel(-1));
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new EnPassantShiftActionChessModel(1));
+            chessPieceTemplate.ActionModelMonitor.PromoteActionChessModels.AddPromoteActionChessModel(new PromoteActionChessModel());
+            chessPieceTemplate.ReactionModelMonitor.AddReactionChessModel(new CaptureReactionChessModel());
+            chessPieceTemplate.ReactionModelMonitor.AddReactionChessModel(new EnPassantCaptureReactionChessModel());
+            this.chessPieceLibrary.Add(chessPieceTemplate.ChessPieceType, chessPieceTemplate);
         }
 
         public ChessPiece CreateChessPiece(IPlayer owner, ChessPieceType chessPieceType, ChessPiecePosition chessPiecePosition)

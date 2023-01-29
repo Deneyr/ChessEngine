@@ -66,6 +66,8 @@
     <Compile Include="ChessBoard.cs" />
     <Compile Include="ChessModels\AReactionChessModel.cs" />
     <Compile Include="ChessModels\CaptureReactionChessModel.cs" />
+    <Compile Include="ChessModels\EnPassantCaptureReactionModel.cs" />
+    <Compile Include="ChessModels\EnPassantShiftActionChessModel.cs" />
     <Compile Include="ChessModels\IPromoteActionChessModel.cs" />
     <Compile Include="ChessModels\IReactionChessModel.cs" />
     <Compile Include="ChessModels\IChessModel.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="ChessModels\PromoteActionChessModel.cs" />
     <Compile Include="ChessModels\ShiftActionChessModel.cs" />
     <Compile Include="ChessModels\ShiftActionChessModelAgreggator.cs" />
+    <Compile Include="ChessModels\PawnTakeShiftActionChessModel.cs" />
     <Compile Include="ChessPiece.cs" />
     <Compile Include="ChessPieceCell.cs" />
     <Compile Include="ChessPieceTemplate.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="ChessTurn.cs" />
     <Compile Include="IChessPiece.cs" />
     <Compile Include="Maths\ChessPiecePosition.cs" />
+    <Compile Include="Maths\MathHelper.cs" />
     <Compile Include="Moves\AChessPieceMove.cs" />
     <Compile Include="Moves\IChessPieceMoveVisistor.cs" />
     <Compile Include="Moves\ShiftChessPieceMove.cs" />

@@ -16,8 +16,23 @@ namespace ChessEngine
 
         private ChessPieceCell[,] chessBoard;
 
-        private int width;
-        private int height;
+        public int Width
+        {
+            get;
+            private set;
+        }
+
+        public int Height
+        {
+            get;
+            private set;
+        }
+
+        public int PromoteBorderDistance
+        {
+            get;
+            private set;
+        }
 
         public List<ChessTurn> ChessTurns
         {
@@ -45,19 +60,29 @@ namespace ChessEngine
             private set;
         }
 
+        public bool IsTurnFirstMove
+        {
+            get
+            {
+                return this.CurrentChessTurn.TurnMoves.Any() == false;
+            }
+        }
+
         public HashSet<ChessPiece> ChessPiecesCemetery
         {
             get;
             private set;
         }
 
-        public ChessBoard(int width = 8, int height = 8)
+        public ChessBoard(int width = 8, int height = 8, int promoteBorderDistance = int.MaxValue)
         {
             this.Players = new List<IPlayer>();
             this.ChessTurns = new List<ChessTurn>();
 
-            this.width = width;
-            this.height = height;
+            this.PromoteBorderDistance = promoteBorderDistance;
+
+            this.Width = width;
+            this.Height = height;
 
             this.InitBoard();
         }
@@ -135,8 +160,8 @@ namespace ChessEngine
 
         public bool IsPositionOnChessBoard(int x, int y)
         {
-            return x >= 0 && x < this.width
-                && y >= 0 && y < this.height;
+            return x >= 0 && x < this.Width
+                && y >= 0 && y < this.Height;
         }
 
         public ChessPiece GetChessPieceAt(ChessPiecePosition chessPiecePosition)
@@ -219,6 +244,7 @@ namespace ChessEngine
             if (currentChessTurn.TurnMoves.Any())
             {
                 ChessPieceMovesContainer chessPieceMove = currentChessTurn.TurnMoves.Last();
+                currentChessTurn.TurnMoves.RemoveAt(currentChessTurn.TurnMoves.Count - 1);
 
                 return chessPieceMove.ApplyReverseMove(this);
             }
@@ -340,10 +366,10 @@ namespace ChessEngine
 
         private void InitBoard()
         {
-            this.chessBoard = new ChessPieceCell[this.height, this.width];
-            for(int i = 0; i < this.height; i++)
+            this.chessBoard = new ChessPieceCell[this.Height, this.Width];
+            for(int i = 0; i < this.Height; i++)
             {
-                for (int j = 0; j < this.width; j++)
+                for (int j = 0; j < this.Width; j++)
                 {
                     this.chessBoard[i, j] = new ChessPieceCell();
                 }

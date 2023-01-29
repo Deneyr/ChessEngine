@@ -17,7 +17,8 @@ namespace ChessEngine.Players
             private set;
         }
 
-        public Player(string playerName)
+        public Player(string playerName, int xDirection, int yDirection)
+            : base(xDirection, yDirection)
         {
             this.PlayerName = playerName;
         }
