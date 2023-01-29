@@ -74,7 +74,7 @@ namespace ChessEngine
             private set;
         }
 
-        public ChessBoard(int width = 8, int height = 8, int promoteBorderDistance = int.MaxValue)
+        public ChessBoard(int width = 8, int height = 8, int promoteBorderDistance = 4)
         {
             this.Players = new List<IPlayer>();
             this.ChessTurns = new List<ChessTurn>();

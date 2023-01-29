@@ -29,7 +29,7 @@ namespace ChessEngine.ChessModels
 
             if (this.IsMoveAllowed(chessBoard, concernedChessPiece, toPosition))
             {
-                chessPieceMove = new ChessPieceMovesContainer(concernedChessPiece, true);
+                chessPieceMove = new ChessPieceMovesContainer(concernedChessPiece, this.IsEndTurnMove(chessBoard, concernedChessPiece, toPosition));
                 chessPieceMove.ChessPieceMoves.Add(new ShiftChessPieceMove(concernedChessPiece, concernedChessPiece.ChessPiecePosition, toPosition));
 
                 return true;
@@ -64,7 +64,7 @@ namespace ChessEngine.ChessModels
 
                     if (this.InternalIsMoveAllowed(chessBoard, concernedChessPiece, toPosition))
                     {
-                        ChessPieceMovesContainer chessPieceMovesContainer = new ChessPieceMovesContainer(concernedChessPiece, this.IsEndTurnMove(chessBoard, concernedChessPiece));
+                        ChessPieceMovesContainer chessPieceMovesContainer = new ChessPieceMovesContainer(concernedChessPiece, this.IsEndTurnMove(chessBoard, concernedChessPiece, toPosition));
                         chessPieceMovesContainer.ChessPieceMoves.Add(new ShiftChessPieceMove(concernedChessPiece, concernedChessPiece.ChessPiecePosition, toPosition));
 
                         resultChessPieceMoves.Add(chessPieceMovesContainer);
@@ -174,7 +174,7 @@ namespace ChessEngine.ChessModels
             return this.numberCellrange;
         }
 
-        protected virtual bool IsEndTurnMove(ChessBoard chessBoard, ChessPiece concernedChessPiece)
+        protected virtual bool IsEndTurnMove(ChessBoard chessBoard, ChessPiece concernedChessPiece, ChessPiecePosition toPosition)
         {
             return true;
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChessEngine.Maths;
 using ChessEngine.Moves;
 
 namespace ChessEngine.ChessModels
@@ -37,12 +38,13 @@ namespace ChessEngine.ChessModels
 
             if (chessBoard.IsTurnFirstMove == false)
             {
-                if (IsInPromoteArea(chessBoard, concernedChessPiece))
+                if (IsInPromoteArea(chessBoard, concernedChessPiece, concernedChessPiece.ChessPiecePosition))
                 {
                     Array chessPieceTypeValues = Enum.GetValues(typeof(ChessPieceType));
                     foreach(ChessPieceType chessPieceTypeValue in chessPieceTypeValues)
                     {                   
-                        if (concernedChessPiece.ChessPieceType != chessPieceTypeValue
+                        if (chessPieceTypeValue != ChessPieceType.KING
+                            && concernedChessPiece.ChessPieceType != chessPieceTypeValue
                             && this.InternalIsMoveAllowed(chessBoard, concernedChessPiece, chessPieceTypeValue))
                         {
                             ChessPieceMovesContainer chessPieceMovesContainer = new ChessPieceMovesContainer(concernedChessPiece, true);
@@ -62,7 +64,7 @@ namespace ChessEngine.ChessModels
             if(chessBoard.IsTurnFirstMove)
             {
                 if (this.InternalIsMoveAllowed(chessBoard, concernedChessPiece, newType)
-                    && IsInPromoteArea(chessBoard, concernedChessPiece))
+                    && IsInPromoteArea(chessBoard, concernedChessPiece, concernedChessPiece.ChessPiecePosition))
                 {
                     return concernedChessPiece.ChessPieceType != newType;
                 }
@@ -71,10 +73,10 @@ namespace ChessEngine.ChessModels
             return false;
         }
 
-        internal static bool IsInPromoteArea(ChessBoard chessBoard, ChessPiece concernedChessPiece)
+        internal static bool IsInPromoteArea(ChessBoard chessBoard, ChessPiece concernedChessPiece, ChessPiecePosition toPosition)
         {
             bool isXInPromote = true;
-            if (concernedChessPiece.Owner.XDirection > 0)
+            if (concernedChessPiece.Owner.XDirection != 0)
             {
                 int xLimit = chessBoard.Width / 2 + concernedChessPiece.Owner.XDirection * chessBoard.PromoteBorderDistance;
 
@@ -87,7 +89,7 @@ namespace ChessEngine.ChessModels
                     xLimit = chessBoard.Width - 1;
                 }
 
-                int xDiff = concernedChessPiece.ChessPiecePosition.X - xLimit;
+                int xDiff = toPosition.X - xLimit;
 
                 if(xDiff * concernedChessPiece.Owner.XDirection < 0)
                 {
@@ -96,7 +98,7 @@ namespace ChessEngine.ChessModels
             }
 
             bool isYInPromote = true;
-            if (concernedChessPiece.Owner.YDirection > 0)
+            if (concernedChessPiece.Owner.YDirection != 0)
             {
                 int yLimit = chessBoard.Height / 2 + concernedChessPiece.Owner.YDirection * chessBoard.PromoteBorderDistance;
 
@@ -109,7 +111,7 @@ namespace ChessEngine.ChessModels
                     yLimit = chessBoard.Height - 1;
                 }
 
-                int yDiff = concernedChessPiece.ChessPiecePosition.Y - yLimit;
+                int yDiff = toPosition.Y - yLimit;
 
                 if (yDiff * concernedChessPiece.Owner.YDirection < 0)
                 {

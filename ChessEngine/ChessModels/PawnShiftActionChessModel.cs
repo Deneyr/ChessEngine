@@ -42,9 +42,9 @@ namespace ChessEngine.ChessModels
             return this.yShift * concernedChessPiece.Owner.YDirection;
         }
 
-        protected override bool IsEndTurnMove(ChessBoard chessBoard, ChessPiece concernedChessPiece)
+        protected override bool IsEndTurnMove(ChessBoard chessBoard, ChessPiece concernedChessPiece, ChessPiecePosition toPosition)
         {
-            return PromoteActionChessModel.IsInPromoteArea(chessBoard, concernedChessPiece);
+            return PromoteActionChessModel.IsInPromoteArea(chessBoard, concernedChessPiece, toPosition) == false;
         }
     }
 }
