@@ -92,34 +92,40 @@ namespace ChessEngine
                     result = this.ReactionModelMonitor.Visit(chessBoard, chessPieceMove);
                 }
 
+                if (result)
+                {
+                    result = chessBoard.IsGivenMovesGetChecked(chessPieceMove);
+                }
+
+                if(result == false)
+                {
+                    chessPieceMove = null;
+                }
+
                 return result;
             }
             return false;
         }
 
-        public bool IsMoveAllowed(ChessBoard chessBoard, IChessMoveInfluence chessMoveInfluence)
+        //public bool IsMoveAllowed(ChessBoard chessBoard, IChessMoveInfluence chessMoveInfluence)
+        //{
+        //    if (chessMoveInfluence != null)
+        //    {
+        //        return chessMoveInfluence.IsMoveAllowed(chessBoard, this) && chessBoard.IsGivenMovesGetChecked(chessMoveInfluence);
+        //    }
+        //    return this.CreateMove;
+        //}
+
+        internal List<ChessPieceMovesContainer> GetAllPossibleMovesWithoutCheckRestriction(ChessBoard chessBoard)
         {
-            if (chessMoveInfluence != null)
-            {
-                return chessMoveInfluence.IsMoveAllowed(chessBoard, this);
-            }
-            return false;
+            List<ChessPieceMovesContainer> possibleMoves = this.ActionModelMonitor.GetAllPossibleMoves(chessBoard, this);
+            return possibleMoves.Where(pElem => this.ReactionModelMonitor.Visit(chessBoard, pElem)).ToList();
         }
 
         public List<ChessPieceMovesContainer> GetAllPossibleMoves(ChessBoard chessBoard)
         {
-            List<ChessPieceMovesContainer> possibleMoves = this.ActionModelMonitor.GetAllPossibleMoves(chessBoard, this);
-            List<ChessPieceMovesContainer> resultPossibleMoves = new List<ChessPieceMovesContainer>();
-
-            foreach (ChessPieceMovesContainer possibleMove in possibleMoves)
-            {
-                if(this.ReactionModelMonitor.Visit(chessBoard, possibleMove))
-                {
-                    resultPossibleMoves.Add(possibleMove);
-                }
-            }
-
-            return resultPossibleMoves;
+            List<ChessPieceMovesContainer> possibleMoves = this.GetAllPossibleMovesWithoutCheckRestriction(chessBoard);
+            return possibleMoves.Where(pElem => chessBoard.IsGivenMovesGetChecked(pElem)).ToList();
         }
     }
 }

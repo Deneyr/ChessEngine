@@ -30,11 +30,26 @@ namespace ChessEngine
             private set;
         }
 
+        public bool IsCurrentKingChecked
+        {
+            get;
+            internal set;
+        }
+
+        public bool IsCurrentKingCheckMated
+        {
+            get;
+            internal set;
+        }
+
         public ChessTurn(int indexPlayer)
         {
             this.IndexPlayer = indexPlayer;
 
             this.TurnMoves = new List<ChessPieceMovesContainer>();
+
+            this.IsCurrentKingChecked = false;
+            this.IsCurrentKingCheckMated = false;
         }
     }
 }

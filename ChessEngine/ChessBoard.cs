@@ -44,7 +44,7 @@ namespace ChessEngine
         {
             get
             {
-                return this.ChessTurns.Last();
+                return this.ChessTurns.LastOrDefault();
             }
         }
 
@@ -115,10 +115,16 @@ namespace ChessEngine
             this.Players.Clear();
 
             this.ChessTurns.Clear();
-            this.ChessTurns.Add(new ChessTurn(0));
 
             this.ChessPiecesOnBoard.Clear();
             this.ChessPiecesCemetery.Clear();
+
+            this.GoToNextTurn();
+        }
+
+        public void InitFirstTurn()
+        {
+            this.GoToNextTurn();
         }
 
         public void AddPlayer(IPlayer playerToAdd)
@@ -274,15 +280,28 @@ namespace ChessEngine
 
         private void GoToNextTurn()
         {
+            int newTurnIndex = 0;
+
             ChessTurn currentChessTurn = this.CurrentChessTurn;
 
-            int newTurnIndex = currentChessTurn.IndexPlayer + 1;
-            if(newTurnIndex >= this.Players.Count)
+            if (currentChessTurn != null)
             {
-                newTurnIndex = 0;
+                newTurnIndex = currentChessTurn.IndexPlayer + 1;
+                if (newTurnIndex >= this.Players.Count)
+                {
+                    newTurnIndex = 0;
+                }
             }
 
-            this.ChessTurns.Add(new ChessTurn(newTurnIndex));
+            ChessTurn newTurn = new ChessTurn(newTurnIndex);
+            this.ChessTurns.Add(newTurn);
+
+            IPlayer currentPlayer = this.Players[this.CurrentChessTurn.IndexPlayer];
+            newTurn.IsCurrentKingChecked = this.IsKingChecked(currentPlayer.KingChessPiece);
+            if (newTurn.IsCurrentKingChecked)
+            {
+                newTurn.IsCurrentKingCheckMated = this.IsCurrentKingCheckMated();
+            }
         }
 
         private void GoToPreviousTurn()
@@ -294,6 +313,66 @@ namespace ChessEngine
             {
                 this.ChessTurns.RemoveAt(currentChessTurn.IndexPlayer);
             }
+        }
+
+        private bool IsKingChecked(ChessPiece king)
+        {
+            if (king != null)
+            {
+                IEnumerable<ChessPiece> otherPlayersChessPieces = this.ChessPiecesOnBoard.Where(pElem => pElem.Owner != king.Owner);
+                foreach (ChessPiece chessPiece in otherPlayersChessPieces)
+                {
+                    List<ChessPieceMovesContainer> possibleMoves = chessPiece.GetAllPossibleMovesWithoutCheckRestriction(this);
+
+                    foreach (ChessPieceMovesContainer move in possibleMoves)
+                    {
+                        IChessPieceMove takeKingMove = move.ChessPieceMoves.FirstOrDefault(
+                            pElem => pElem is KillChessPieceMove
+                            && pElem.ConcernedChessPiece == king);
+
+                        if (takeKingMove != null)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        private bool IsCurrentKingCheckMated()
+        {
+            IPlayer currentPlayer = this.Players[this.CurrentChessTurn.IndexPlayer];
+
+            foreach (ChessPiece chessPiece in currentPlayer.ChessPiecesOwned)
+            {
+                List<ChessPieceMovesContainer> possibleMoves = chessPiece.GetAllPossibleMoves(this);
+
+                if (possibleMoves.Any())
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        internal bool IsGivenMovesGetChecked(ChessPieceMovesContainer move)
+        {
+            bool lResult = false;
+            ChessPiece king = this.Players[this.CurrentChessTurn.IndexPlayer].KingChessPiece;
+
+            bool isMoveEndTurn = move.IsEndTurn;
+            move.IsEndTurn = true;
+            if (king != null && this.ComputeChessPieceMoves(move))
+            {
+                lResult = this.IsKingChecked(king);
+
+                this.RevertLastChessMove();
+            }
+            move.IsEndTurn = isMoveEndTurn;
+
+            return lResult;
         }
 
         internal void MoveChessPieceTo(ChessPiece chessPiece, ChessPiecePosition chessPiecePosition)

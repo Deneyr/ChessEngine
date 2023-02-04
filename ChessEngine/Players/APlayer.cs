@@ -8,19 +8,25 @@ namespace ChessEngine.Players
 {
     public abstract class APlayer: IPlayer
     {
+        public virtual ChessPiece KingChessPiece
+        {
+            get;
+            private set;
+        }
+
         public virtual List<ChessPiece> ChessPiecesOwned
         {
             get;
             private set;
         }
 
-        public int XDirection
+        public virtual int XDirection
         {
             get;
             private set;
         }
 
-        public int YDirection
+        public virtual int YDirection
         {
             get;
             private set;
@@ -29,6 +35,7 @@ namespace ChessEngine.Players
         public APlayer(int xDirection, int yDirection)
         {
             this.ChessPiecesOwned = new List<ChessPiece>();
+            this.KingChessPiece = null;
 
             this.XDirection = xDirection;
             this.YDirection = yDirection;
@@ -37,6 +44,11 @@ namespace ChessEngine.Players
         public virtual void AddChessPieceToPlayer(ChessPiece chessPieceToAdd)
         {
             this.ChessPiecesOwned.Add(chessPieceToAdd);
+
+            if(chessPieceToAdd.ChessPieceType == ChessPieceType.KING)
+            {
+                this.KingChessPiece = chessPieceToAdd;
+            }
         }
 
         public virtual void RemoveChessPieceOfPlayer(ChessPiece chessPieceToRemove)

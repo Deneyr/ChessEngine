@@ -8,6 +8,11 @@ namespace ChessEngine.Players
 {
     public interface IPlayer
     {
+        ChessPiece KingChessPiece
+        {
+            get;
+        }
+
         List<ChessPiece> ChessPiecesOwned
         {
             get;

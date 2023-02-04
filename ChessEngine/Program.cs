@@ -60,6 +60,8 @@ namespace ChessEngine
             // Chess pieces player 2
             chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(2, 4));
             chessBoard.AddChessPiece(chessPiece);
+
+            chessBoard.InitFirstTurn();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ChessEngine.Moves
         public bool IsEndTurn
         {
             get;
-            private set;
+            internal set;
         }
 
         public List<IChessPieceMove> ChessPieceMoves
