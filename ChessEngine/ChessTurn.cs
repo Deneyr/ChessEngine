@@ -36,7 +36,7 @@ namespace ChessEngine
             internal set;
         }
 
-        public bool IsCurrentKingCheckMated
+        public bool CanPlayerMoveChessPieces
         {
             get;
             internal set;
@@ -49,7 +49,7 @@ namespace ChessEngine
             this.TurnMoves = new List<ChessPieceMovesContainer>();
 
             this.IsCurrentKingChecked = false;
-            this.IsCurrentKingCheckMated = false;
+            this.CanPlayerMoveChessPieces = true;
         }
     }
 }

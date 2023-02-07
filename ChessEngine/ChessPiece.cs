@@ -94,7 +94,7 @@ namespace ChessEngine
 
                 if (result)
                 {
-                    result = chessBoard.IsGivenMovesGetChecked(chessPieceMove);
+                    result = chessBoard.IsGivenMovesGetChecked(chessPieceMove) == false;
                 }
 
                 if(result == false)
@@ -125,7 +125,7 @@ namespace ChessEngine
         public List<ChessPieceMovesContainer> GetAllPossibleMoves(ChessBoard chessBoard)
         {
             List<ChessPieceMovesContainer> possibleMoves = this.GetAllPossibleMovesWithoutCheckRestriction(chessBoard);
-            return possibleMoves.Where(pElem => chessBoard.IsGivenMovesGetChecked(pElem)).ToList();
+            return possibleMoves.Where(pElem => chessBoard.IsGivenMovesGetChecked(pElem) == false).ToList();
         }
     }
 }

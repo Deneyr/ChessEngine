@@ -79,6 +79,20 @@ namespace ChessEngine
             chessPieceTemplate.ReactionModelMonitor.AddReactionChessModel(new CaptureReactionChessModel());
             chessPieceTemplate.ReactionModelMonitor.AddReactionChessModel(new EnPassantCaptureReactionChessModel());
             this.chessPieceLibrary.Add(chessPieceTemplate.ChessPieceType, chessPieceTemplate);
+
+            // King template
+            chessPieceTemplate = new ChessPieceTemplate();
+            chessPieceTemplate.ChessPieceType = ChessPieceType.KING;
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new ShiftActionChessModel(-1, 0, 1));
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new ShiftActionChessModel(1, 0, 1));
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new ShiftActionChessModel(-1, -1, 1));
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new ShiftActionChessModel(1, -1, 1));
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new ShiftActionChessModel(0, -1, 1));
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new ShiftActionChessModel(-1, 1, 1));
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new ShiftActionChessModel(1, 1, 1));
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new ShiftActionChessModel(0, 1, 1));
+            chessPieceTemplate.ReactionModelMonitor.AddReactionChessModel(new CaptureReactionChessModel());
+            this.chessPieceLibrary.Add(chessPieceTemplate.ChessPieceType, chessPieceTemplate);
         }
 
         public ChessPiece CreateChessPiece(IPlayer owner, ChessPieceType chessPieceType, ChessPiecePosition chessPiecePosition)

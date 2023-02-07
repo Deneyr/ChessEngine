@@ -17,21 +17,21 @@ namespace ChessEngine
             ChessBoard chessBoard = new ChessBoard();
             InitChessBoardGame(chessBoard);
 
-            ChessPiece chessPiece = chessBoard.Players[0].ChessPiecesOwned[2];
-            ChessPiece chessPiece2 = chessBoard.Players[1].ChessPiecesOwned[0];
+            ChessPiece chessPiece = chessBoard.Players[0].ChessPiecesOwned[0];
+            ChessPiece chessPiece2 = chessBoard.Players[1].ChessPiecesOwned[4];
 
-            IChessMoveInfluence moveInfluence = new ShiftChessMoveInfluence(new ChessPiecePosition(3, 0));
+            IChessMoveInfluence moveInfluence = new ShiftChessMoveInfluence(new ChessPiecePosition(3, 7));
             bool result = chessPiece.CreateMove(chessBoard, moveInfluence, out ChessPieceMovesContainer move);
             List<ChessPieceMovesContainer> moves = chessPiece.GetAllPossibleMoves(chessBoard);
 
             chessBoard.ComputeChessPieceInfluence(chessPiece, moveInfluence);
 
-            moves = chessPiece.GetAllPossibleMoves(chessBoard);
-
-            chessBoard.RevertLastChessMove();
-            chessBoard.ComputeChessPieceInfluence(chessPiece, moveInfluence);
-
             moves = chessPiece2.GetAllPossibleMoves(chessBoard);
+
+            //chessBoard.RevertLastChessMove();
+            //chessBoard.ComputeChessPieceInfluence(chessPiece, moveInfluence);
+
+            //moves = chessPiece2.GetAllPossibleMoves(chessBoard);
 
             Console.WriteLine(moves);
         }
@@ -52,13 +52,21 @@ namespace ChessEngine
             // Chess pieces player 1
             chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.BISHOP, new ChessPiecePosition(5, 5));
             chessBoard.AddChessPiece(chessPiece);
-            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.KNIGHT, new ChessPiecePosition(4, 4));
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.KNIGHT, new ChessPiecePosition(2, 2));
             chessBoard.AddChessPiece(chessPiece);
-            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(3, 2));
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.ROOK, new ChessPiecePosition(7, 4));
             chessBoard.AddChessPiece(chessPiece);
 
             // Chess pieces player 2
-            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(2, 4));
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(0, 3));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(1, 3));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(0, 5));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.KING, new ChessPiecePosition(0, 4));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.KNIGHT, new ChessPiecePosition(1, 4));
             chessBoard.AddChessPiece(chessPiece);
 
             chessBoard.InitFirstTurn();

@@ -118,8 +118,6 @@ namespace ChessEngine
 
             this.ChessPiecesOnBoard.Clear();
             this.ChessPiecesCemetery.Clear();
-
-            this.GoToNextTurn();
         }
 
         public void InitFirstTurn()
@@ -297,21 +295,16 @@ namespace ChessEngine
             this.ChessTurns.Add(newTurn);
 
             IPlayer currentPlayer = this.Players[this.CurrentChessTurn.IndexPlayer];
+
             newTurn.IsCurrentKingChecked = this.IsKingChecked(currentPlayer.KingChessPiece);
-            if (newTurn.IsCurrentKingChecked)
-            {
-                newTurn.IsCurrentKingCheckMated = this.IsCurrentKingCheckMated();
-            }
+            newTurn.CanPlayerMoveChessPieces = this.CanPlayerMoveChessPieces();
         }
 
         private void GoToPreviousTurn()
         {
-            ChessTurn currentChessTurn = this.CurrentChessTurn;
-
-            int newTurnIndex = currentChessTurn.IndexPlayer - 1;
-            if (newTurnIndex >= 0)
+            if (this.ChessTurns.Count > 1)
             {
-                this.ChessTurns.RemoveAt(currentChessTurn.IndexPlayer);
+                this.ChessTurns.RemoveAt(this.ChessTurns.Count - 1);
             }
         }
 
@@ -340,7 +333,7 @@ namespace ChessEngine
             return false;
         }
 
-        private bool IsCurrentKingCheckMated()
+        private bool CanPlayerMoveChessPieces()
         {
             IPlayer currentPlayer = this.Players[this.CurrentChessTurn.IndexPlayer];
 
@@ -350,11 +343,11 @@ namespace ChessEngine
 
                 if (possibleMoves.Any())
                 {
-                    return false;
+                    return true;
                 }
             }
 
-            return true;
+            return false;
         }
 
         internal bool IsGivenMovesGetChecked(ChessPieceMovesContainer move)
