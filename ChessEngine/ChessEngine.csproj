@@ -66,6 +66,7 @@
     <Compile Include="ChessBoard.cs" />
     <Compile Include="ChessModels\AReactionChessModel.cs" />
     <Compile Include="ChessModels\CaptureReactionChessModel.cs" />
+    <Compile Include="ChessModels\CastleShiftActionChessModel.cs" />
     <Compile Include="ChessModels\EnPassantCaptureReactionModel.cs" />
     <Compile Include="ChessModels\EnPassantShiftActionChessModel.cs" />
     <Compile Include="ChessModels\IPromoteActionChessModel.cs" />

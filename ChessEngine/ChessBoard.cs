@@ -89,22 +89,22 @@ namespace ChessEngine
 
         //public ChessPiecePosition ClampChessPiecePositionToBoard(ChessPiecePosition chessPiecePosition)
         //{
-        //    if(chessPiecePosition.X < 0)
+        //    if (chessPiecePosition.X < 0)
         //    {
         //        chessPiecePosition.X = 0;
         //    }
-        //    else if(chessPiecePosition.X >= this.width)
+        //    else if (chessPiecePosition.X >= this.Width)
         //    {
-        //        chessPiecePosition.X = this.width - 1;
+        //        chessPiecePosition.X = this.Width - 1;
         //    }
 
         //    if (chessPiecePosition.Y < 0)
         //    {
         //        chessPiecePosition.Y = 0;
         //    }
-        //    else if (chessPiecePosition.Y >= this.height)
+        //    else if (chessPiecePosition.Y >= this.Height)
         //    {
-        //        chessPiecePosition.Y = this.height - 1;
+        //        chessPiecePosition.Y = this.Height - 1;
         //    }
 
         //    return chessPiecePosition;

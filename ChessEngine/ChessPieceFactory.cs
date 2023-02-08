@@ -91,6 +91,8 @@ namespace ChessEngine
             chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new ShiftActionChessModel(-1, 1, 1));
             chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new ShiftActionChessModel(1, 1, 1));
             chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new ShiftActionChessModel(0, 1, 1));
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new CastleShiftActionChessModel(1));
+            chessPieceTemplate.ActionModelMonitor.ShiftActionChessModels.AddShiftActionChessModel(new CastleShiftActionChessModel(-1));
             chessPieceTemplate.ReactionModelMonitor.AddReactionChessModel(new CaptureReactionChessModel());
             this.chessPieceLibrary.Add(chessPieceTemplate.ChessPieceType, chessPieceTemplate);
         }
