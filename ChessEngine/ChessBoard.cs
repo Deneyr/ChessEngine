@@ -16,6 +16,9 @@ namespace ChessEngine
 
         private ChessPieceCell[,] chessBoard;
 
+        public event Action NewTurnStarted;
+        public event Action PreviousTurnStarted;
+
         public int Width
         {
             get;
@@ -86,29 +89,6 @@ namespace ChessEngine
 
             this.InitBoard();
         }
-
-        //public ChessPiecePosition ClampChessPiecePositionToBoard(ChessPiecePosition chessPiecePosition)
-        //{
-        //    if (chessPiecePosition.X < 0)
-        //    {
-        //        chessPiecePosition.X = 0;
-        //    }
-        //    else if (chessPiecePosition.X >= this.Width)
-        //    {
-        //        chessPiecePosition.X = this.Width - 1;
-        //    }
-
-        //    if (chessPiecePosition.Y < 0)
-        //    {
-        //        chessPiecePosition.Y = 0;
-        //    }
-        //    else if (chessPiecePosition.Y >= this.Height)
-        //    {
-        //        chessPiecePosition.Y = this.Height - 1;
-        //    }
-
-        //    return chessPiecePosition;
-        //}
 
         public void InitGame()
         {
@@ -298,6 +278,8 @@ namespace ChessEngine
 
             newTurn.IsCurrentKingChecked = this.IsKingChecked(currentPlayer.KingChessPiece);
             newTurn.CanPlayerMoveChessPieces = this.CanPlayerMoveChessPieces();
+
+            this.NewTurnStarted?.Invoke();
         }
 
         private void GoToPreviousTurn()
@@ -305,6 +287,8 @@ namespace ChessEngine
             if (this.ChessTurns.Count > 1)
             {
                 this.ChessTurns.RemoveAt(this.ChessTurns.Count - 1);
+
+                this.PreviousTurnStarted?.Invoke();
             }
         }
 
@@ -312,9 +296,14 @@ namespace ChessEngine
         {
             if (king != null)
             {
+                ChessTurn currentChessTurn = this.CurrentChessTurn;
+
                 IEnumerable<ChessPiece> otherPlayersChessPieces = this.ChessPiecesOnBoard.Where(pElem => pElem.Owner != king.Owner);
                 foreach (ChessPiece chessPiece in otherPlayersChessPieces)
                 {
+                    // Simulate a "fake" turn to get the all possible moves of the chessPiece inspected 
+                    this.ChessTurns.Add(new ChessTurn(this.Players.IndexOf(chessPiece.Owner)));
+
                     List<ChessPieceMovesContainer> possibleMoves = chessPiece.GetAllPossibleMovesWithoutCheckRestriction(this);
 
                     foreach (ChessPieceMovesContainer move in possibleMoves)
@@ -325,9 +314,15 @@ namespace ChessEngine
 
                         if (takeKingMove != null)
                         {
+                            // Remove the simulated turn
+                            this.ChessTurns.RemoveAt(this.ChessTurns.Count - 1);
+
                             return true;
                         }
                     }
+
+                    // Remove the simulated turn
+                    this.ChessTurns.RemoveAt(this.ChessTurns.Count - 1);
                 }
             }
             return false;

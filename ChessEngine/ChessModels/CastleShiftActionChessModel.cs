@@ -46,9 +46,9 @@ namespace ChessEngine.ChessModels
             {
                 ChessPiecePosition castlingPosition = this.GetCastlingPosition(chessBoard, concernedChessPiece, out ChessPiecePosition otherChessPiecePosition);
 
-                if (castlingPosition.X >= 0 && castlingPosition.Y > 0)
+                if (castlingPosition.X >= 0 && castlingPosition.Y >= 0)
                 {
-                    if(this.CreateMoveFrom(chessBoard, concernedChessPiece, castlingPosition, out ChessPieceMovesContainer chessPieceMoves))
+                    if (this.CreateMoveFrom(chessBoard, concernedChessPiece, castlingPosition, out ChessPieceMovesContainer chessPieceMoves))
                     {
                         resultChessPieceMoves.Add(chessPieceMoves);
                     }
@@ -65,16 +65,17 @@ namespace ChessEngine.ChessModels
             this.currentXGlobalShift = 0;
             this.currentYGlobalShift = 0;
 
-            if (chessBoard.IsTurnFirstMove && concernedChessPiece.HasAlreadyMoved == false)
+            if (chessBoard.IsTurnFirstMove
+                && concernedChessPiece.HasAlreadyMoved == false)
             {
                 ChessPiecePosition castlingPosition = this.GetCastlingPosition(chessBoard, concernedChessPiece, out ChessPiecePosition otherChessPiecePosition);
 
-                if (castlingPosition.X >= 0 && castlingPosition .Y > 0 
+                if (castlingPosition.X >= 0 && castlingPosition.Y >= 0 
                         && toPosition == castlingPosition)
                 {
                     this.currentOtherChessPiece = chessBoard.GetChessPieceAt(otherChessPiecePosition);
 
-                    if (this.currentOtherChessPiece != null && this.currentOtherChessPiece.HasAlreadyMoved)
+                    if (this.currentOtherChessPiece != null && this.currentOtherChessPiece.HasAlreadyMoved == false)
                     {
                         if (this.InternalIsMoveAllowed(chessBoard, concernedChessPiece, this.currentOtherChessPiece, toPosition))
                         {
@@ -82,14 +83,14 @@ namespace ChessEngine.ChessModels
 
                             ChessPiecePosition throughPosition = concernedChessPiece.ChessPiecePosition;
 
-                            while(throughPosition != toPosition
+                            while (throughPosition != toPosition
                                 && chessBoard.IsGivenMovesGetChecked(this.CreateTemporaryMove(concernedChessPiece, throughPosition)) == false)
                             {
                                 throughPosition.X += xGlobalShift;
                                 throughPosition.Y += yGlobalShift;
                             }
 
-                            if(throughPosition == toPosition
+                            if (throughPosition == toPosition
                                 && chessBoard.IsGivenMovesGetChecked(this.CreateTemporaryMove(concernedChessPiece, throughPosition)) == false)
                             {
                                 this.currentXGlobalShift = xGlobalShift;
@@ -120,7 +121,7 @@ namespace ChessEngine.ChessModels
 
             MathHelper.ChangeBaseVector(this.xShift, 0, concernedChessPiece.Owner.XDirection, concernedChessPiece.Owner.YDirection, out int xGlobalShift, out int yGlobalShift);
 
-            int step = chessBoard.RayTrace(concernedChessPiece.ChessPiecePosition, xGlobalShift, yGlobalShift, 1, out ChessPiece chessPieceTouched);
+            int step = chessBoard.RayTrace(concernedChessPiece.ChessPiecePosition, xGlobalShift, yGlobalShift, int.MaxValue, out ChessPiece chessPieceTouched);
 
             if (chessPieceTouched != null)
             {
