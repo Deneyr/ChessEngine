@@ -51,9 +51,6 @@ namespace ChessEngine
 
             // Chess pieces player 1
             // Position is compute from the top left corner of the board, starting from 0
-            // +-->
-            // |
-            // ˇ
             chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.BISHOP, new ChessPiecePosition(5, 5));
             chessBoard.AddChessPiece(chessPiece);
             chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.KNIGHT, new ChessPiecePosition(3, 3));

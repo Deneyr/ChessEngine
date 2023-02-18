@@ -16,8 +16,23 @@ namespace ChessEngine
 
         private ChessPieceCell[,] chessBoard;
 
-        public event Action NewTurnStarted;
-        public event Action PreviousTurnStarted;
+        /// <summary>
+        /// Events raising order : MoveApplied + (NextTurnStarted)
+        /// </summary>
+        public event Action<ChessTurn> NextTurnStarted;
+        /// <summary>
+        /// Events raising order : (PreviousTurnStarted) + MoveReverted
+        /// </summary>
+        public event Action<ChessTurn> PreviousTurnStarted;
+
+        /// <summary>
+        /// Events raising order : MoveApplied + (NextTurnStarted)
+        /// </summary>
+        public event Action<ChessPieceMovesContainer> MoveApplied;
+        /// <summary>
+        /// Events raising order : (PreviousTurnStarted) + MoveReverted
+        /// </summary>
+        public event Action<ChessPieceMovesContainer> MoveReverted;
 
         public int Width
         {
@@ -214,6 +229,27 @@ namespace ChessEngine
             return false;
         }
 
+        public bool ComputeSimulatedChessPieceMoves(ChessPieceMovesContainer chessPieceMove)
+        {
+            ChessTurn currentChessTurn = this.CurrentChessTurn;
+
+            IPlayer currentPlayer = this.Players[currentChessTurn.IndexPlayer];
+
+            if (chessPieceMove.ApplyMove(this))
+            {
+                currentChessTurn.TurnMoves.Add(chessPieceMove);
+
+                if (currentChessTurn.IsTurnFinished)
+                {
+                    this.GoToNextSimulatedTurn();
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
         public bool RevertLastChessMove()
         {
             ChessTurn currentChessTurn = this.CurrentChessTurn;
@@ -221,6 +257,34 @@ namespace ChessEngine
             if (currentChessTurn.TurnMoves.Any() == false)
             {
                 this.GoToPreviousTurn();
+
+                currentChessTurn = this.CurrentChessTurn;
+            }
+
+            if (currentChessTurn.TurnMoves.Any())
+            {
+                ChessPieceMovesContainer chessPieceMove = currentChessTurn.TurnMoves.Last();
+
+                if (chessPieceMove.ApplyReverseMove(this))
+                {
+                    currentChessTurn.TurnMoves.RemoveAt(currentChessTurn.TurnMoves.Count - 1);
+
+                    this.MoveReverted?.Invoke(chessPieceMove);
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool RevertLastSimulatedChessMove()
+        {
+            ChessTurn currentChessTurn = this.CurrentChessTurn;
+
+            if (currentChessTurn.TurnMoves.Any() == false)
+            {
+                this.GoToPreviousSimulatedTurn();
 
                 currentChessTurn = this.CurrentChessTurn;
             }
@@ -243,6 +307,8 @@ namespace ChessEngine
                 if (chessPieceMove.ApplyMove(this))
                 {
                     currentChessTurn.TurnMoves.Add(chessPieceMove);
+
+                    this.MoveApplied?.Invoke(chessPieceMove);
 
                     if (currentChessTurn.IsTurnFinished)
                     {
@@ -279,16 +345,47 @@ namespace ChessEngine
             newTurn.IsCurrentKingChecked = this.IsKingChecked(currentPlayer.KingChessPiece);
             newTurn.CanPlayerMoveChessPieces = this.CanPlayerMoveChessPieces();
 
-            this.NewTurnStarted?.Invoke();
+            this.NextTurnStarted?.Invoke(currentChessTurn);
+        }
+
+        private void GoToNextSimulatedTurn()
+        {
+            int newTurnIndex = 0;
+
+            ChessTurn currentChessTurn = this.CurrentChessTurn;
+
+            if (currentChessTurn != null)
+            {
+                newTurnIndex = currentChessTurn.IndexPlayer + 1;
+                if (newTurnIndex >= this.Players.Count)
+                {
+                    newTurnIndex = 0;
+                }
+            }
+
+            ChessTurn newTurn = new ChessTurn(newTurnIndex);
+            this.ChessTurns.Add(newTurn);
         }
 
         private void GoToPreviousTurn()
         {
             if (this.ChessTurns.Count > 1)
             {
+                ChessTurn currentChessTurn = this.CurrentChessTurn;
+
                 this.ChessTurns.RemoveAt(this.ChessTurns.Count - 1);
 
-                this.PreviousTurnStarted?.Invoke();
+                this.PreviousTurnStarted?.Invoke(currentChessTurn);
+            }
+        }
+
+        private void GoToPreviousSimulatedTurn()
+        {
+            if (this.ChessTurns.Count > 1)
+            {
+                ChessTurn currentChessTurn = this.CurrentChessTurn;
+
+                this.ChessTurns.RemoveAt(this.ChessTurns.Count - 1);
             }
         }
 
@@ -352,12 +449,14 @@ namespace ChessEngine
 
             bool isMoveEndTurn = move.IsEndTurn;
             move.IsEndTurn = true;
-            if (king != null && this.ComputeChessPieceMoves(move))
+
+            if (king != null && this.ComputeSimulatedChessPieceMoves(move))
             {
                 lResult = this.IsKingChecked(king);
 
-                this.RevertLastChessMove();
+                this.RevertLastSimulatedChessMove();
             }
+
             move.IsEndTurn = isMoveEndTurn;
 
             return lResult;

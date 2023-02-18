@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.2092
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessEngine", "ChessEngine\ChessEngine.csproj", "{EC2E97AB-8BF8-48F6-A6F1-A9E28F150531}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessView", "ChessView\ChessView.csproj", "{7B5A66C8-2110-42E4-BFBC-826E07900FDA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,14 +15,18 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EC2E97AB-8BF8-48F6-A6F1-A9E28F150531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC2E97AB-8BF8-48F6-A6F1-A9E28F150531}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC2E97AB-8BF8-48F6-A6F1-A9E28F150531}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{EC2E97AB-8BF8-48F6-A6F1-A9E28F150531}.Debug|x64.Build.0 = Debug|Any CPU
+		{EC2E97AB-8BF8-48F6-A6F1-A9E28F150531}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{EC2E97AB-8BF8-48F6-A6F1-A9E28F150531}.Debug|x64.ActiveCfg = Debug|x64
+		{EC2E97AB-8BF8-48F6-A6F1-A9E28F150531}.Debug|x64.Build.0 = Debug|x64
 		{EC2E97AB-8BF8-48F6-A6F1-A9E28F150531}.Release|Any CPU.ActiveCfg = Release|x64
-		{EC2E97AB-8BF8-48F6-A6F1-A9E28F150531}.Release|Any CPU.Build.0 = Release|x64
 		{EC2E97AB-8BF8-48F6-A6F1-A9E28F150531}.Release|x64.ActiveCfg = Release|x64
 		{EC2E97AB-8BF8-48F6-A6F1-A9E28F150531}.Release|x64.Build.0 = Release|x64
+		{7B5A66C8-2110-42E4-BFBC-826E07900FDA}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{7B5A66C8-2110-42E4-BFBC-826E07900FDA}.Debug|x64.ActiveCfg = Debug|x64
+		{7B5A66C8-2110-42E4-BFBC-826E07900FDA}.Debug|x64.Build.0 = Debug|x64
+		{7B5A66C8-2110-42E4-BFBC-826E07900FDA}.Release|Any CPU.ActiveCfg = Release|x64
+		{7B5A66C8-2110-42E4-BFBC-826E07900FDA}.Release|x64.ActiveCfg = Release|x64
+		{7B5A66C8-2110-42E4-BFBC-826E07900FDA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
