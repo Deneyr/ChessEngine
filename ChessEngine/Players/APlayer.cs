@@ -60,5 +60,7 @@ namespace ChessEngine.Players
         {
             this.ChessPiecesOwned.Clear();
         }
+
+        public abstract object Clone();
     }
 }

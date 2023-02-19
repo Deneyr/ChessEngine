@@ -9,25 +9,25 @@ namespace ChessEngine.ChessModels.Monitors
 {
     public class PromoteChessMoveInfluence : IChessMoveInfluence
     {
-        public ChessPieceType ToType
+        public ChessPieceType ToChessType
         {
             get;
             private set;
         }
 
-        public PromoteChessMoveInfluence(ChessPieceType toType)
+        public PromoteChessMoveInfluence(ChessPieceType toChessType)
         {
-            this.ToType = toType;
+            this.ToChessType = toChessType;
         }
 
         public bool CreateMove(ChessBoard chessBoard, ChessPiece concernedChessPiece, out ChessPieceMovesContainer chessPieceMove)
         {
-            return concernedChessPiece.ActionModelMonitor.CreatePromoteMoveFrom(chessBoard, concernedChessPiece, this.ToType, out chessPieceMove);
+            return concernedChessPiece.ActionModelMonitor.CreatePromoteMoveFrom(chessBoard, concernedChessPiece, this.ToChessType, out chessPieceMove);
         }
 
         public bool IsMoveAllowed(ChessBoard chessBoard, ChessPiece concernedChessPiece)
         {
-            return concernedChessPiece.ActionModelMonitor.IsPromoteMoveAllowed(chessBoard, concernedChessPiece, this.ToType);
+            return concernedChessPiece.ActionModelMonitor.IsPromoteMoveAllowed(chessBoard, concernedChessPiece, this.ToChessType);
         }
     }
 }

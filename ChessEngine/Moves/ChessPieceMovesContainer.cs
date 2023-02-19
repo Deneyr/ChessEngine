@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChessEngine.ChessModels.Monitors;
 using ChessEngine.Maths;
 
 namespace ChessEngine.Moves
@@ -29,21 +30,6 @@ namespace ChessEngine.Moves
             this.IsEndTurn = isEndTurn;
         }
 
-        //public virtual bool AcceptVisitor(ChessBoard chessBoard, IChessPieceMoveVisitor chessPieceMoveVisitor)
-        //{
-        //    return chessPieceMoveVisitor.Visit(chessBoard, this);
-        //}
-
-        //public void AddMove(IChessPieceMove chessPieceMoveToAdd)
-        //{
-        //    this.ChessPieceMoves.Add(chessPieceMoveToAdd);
-        //}
-
-        //public void RemoveMove(IChessPieceMove chessPieceMoveToRemove)
-        //{
-        //    this.ChessPieceMoves.Remove(chessPieceMoveToRemove);
-        //}
-
         public override bool ApplyMove(ChessBoard chessBoard)
         {
             bool isSuccess = true;
@@ -68,6 +54,15 @@ namespace ChessEngine.Moves
             }
 
             return isSuccess;
+        }
+
+        public override IChessMoveInfluence CreateInfluence()
+        {
+            if (this.ChessPieceMoves.Any())
+            {
+                return this.ChessPieceMoves.FirstOrDefault().CreateInfluence();
+            }
+            return null;
         }
     }
 }

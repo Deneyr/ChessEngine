@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessEngine", "ChessEngine\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessView", "ChessView\ChessView.csproj", "{7B5A66C8-2110-42E4-BFBC-826E07900FDA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessInterface", "ChessInterface\ChessInterface.csproj", "{8F7FC898-B98B-4CEC-A2CC-54A28CBE5087}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,12 @@ Global
 		{7B5A66C8-2110-42E4-BFBC-826E07900FDA}.Release|Any CPU.ActiveCfg = Release|x64
 		{7B5A66C8-2110-42E4-BFBC-826E07900FDA}.Release|x64.ActiveCfg = Release|x64
 		{7B5A66C8-2110-42E4-BFBC-826E07900FDA}.Release|x64.Build.0 = Release|x64
+		{8F7FC898-B98B-4CEC-A2CC-54A28CBE5087}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{8F7FC898-B98B-4CEC-A2CC-54A28CBE5087}.Debug|x64.ActiveCfg = Debug|x64
+		{8F7FC898-B98B-4CEC-A2CC-54A28CBE5087}.Debug|x64.Build.0 = Debug|x64
+		{8F7FC898-B98B-4CEC-A2CC-54A28CBE5087}.Release|Any CPU.ActiveCfg = Release|x64
+		{8F7FC898-B98B-4CEC-A2CC-54A28CBE5087}.Release|x64.ActiveCfg = Release|x64
+		{8F7FC898-B98B-4CEC-A2CC-54A28CBE5087}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,20 +1,27 @@
-﻿using ChessEngine.ChessModels.Monitors;
+﻿using ChessEngine;
+using ChessEngine.ChessModels.Monitors;
 using ChessEngine.Maths;
 using ChessEngine.Moves;
 using ChessEngine.Players;
+using ChessInterface.Handlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessEngine
+namespace ChessInterface
 {
     class Program
     {
         static void Main(string[] args)
         {
+            TestAsyncHandler handler = new TestAsyncHandler();
+            ChessBoardInterface chessBoardInterface = new ChessBoardInterface(handler);
+
             ChessBoard chessBoard = new ChessBoard();
+            chessBoardInterface.RegisterChessBoard(chessBoard);
+
             InitChessBoardGame(chessBoard);
 
             ChessPiece chessPiece = chessBoard.Players[0].ChessPiecesOwned[0];
@@ -26,14 +33,8 @@ namespace ChessEngine
 
             chessBoard.ComputeChessPieceInfluence(chessPiece, moveInfluence);
 
-            moves = chessPiece2.GetAllPossibleMoves(chessBoard);
-
-            //chessBoard.RevertLastChessMove();
-            //chessBoard.ComputeChessPieceInfluence(chessPiece, moveInfluence);
-
-            //moves = chessPiece2.GetAllPossibleMoves(chessBoard);
-
-            Console.WriteLine(moves);
+            Console.WriteLine(chessBoardInterface);
+            Console.Read();
         }
 
         static private void InitChessBoardGame(ChessBoard chessBoard)

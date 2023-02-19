@@ -22,5 +22,10 @@ namespace ChessEngine.Players
         {
             this.PlayerName = playerName;
         }
+
+        public override object Clone()
+        {
+            return new Player(this.PlayerName, this.XDirection, this.YDirection);
+        }
     }
 }

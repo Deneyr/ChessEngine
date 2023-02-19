@@ -1,4 +1,5 @@
-﻿using ChessEngine.Maths;
+﻿using ChessEngine.ChessModels.Monitors;
+using ChessEngine.Maths;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,11 @@ namespace ChessEngine.Moves
                 return base.ApplyReverseMove(chessBoard);
             }
             return false;
+        }
+
+        public override IChessMoveInfluence CreateInfluence()
+        {
+            return null;
         }
     }
 }

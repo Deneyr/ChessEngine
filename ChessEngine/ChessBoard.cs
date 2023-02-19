@@ -16,6 +16,12 @@ namespace ChessEngine
 
         private ChessPieceCell[,] chessBoard;
 
+        public event Action ChessGameStarting;
+        public event Action ChessGameStarted;
+
+        public event Action<IPlayer> PlayerAddedToBoard;
+        public event Action<ChessPiece> PieceAddedToBoard;
+
         /// <summary>
         /// Events raising order : MoveApplied + (NextTurnStarted)
         /// </summary>
@@ -113,24 +119,30 @@ namespace ChessEngine
 
             this.ChessPiecesOnBoard.Clear();
             this.ChessPiecesCemetery.Clear();
+
+            this.ChessGameStarting?.Invoke();
         }
 
         public void InitFirstTurn()
         {
             this.GoToNextTurn();
+
+            this.ChessGameStarted?.Invoke();
         }
 
         public void AddPlayer(IPlayer playerToAdd)
         {
             this.Players.Add(playerToAdd);
             playerToAdd.ClearChessPieces();
+
+            this.PlayerAddedToBoard?.Invoke(playerToAdd);
         }
 
-        public void RemovePlayer(IPlayer playerToRemove)
-        {
-            this.Players.Add(playerToRemove);
-            playerToRemove.ClearChessPieces();
-        }
+        //public void RemovePlayer(IPlayer playerToRemove)
+        //{
+        //    this.Players.Add(playerToRemove);
+        //    playerToRemove.ClearChessPieces();
+        //}
 
         public void AddChessPiece(ChessPiece chessPieceToAdd)
         {
@@ -138,14 +150,16 @@ namespace ChessEngine
             this.AddChessPieceTo(chessPieceToAdd, chessPieceToAdd.ChessPiecePosition);
 
             chessPieceToAdd.Owner.AddChessPieceToPlayer(chessPieceToAdd);
+
+            this.PieceAddedToBoard?.Invoke(chessPieceToAdd);
         }
 
-        public void RemoveChessPiece(ChessPiece chessPieceToRemove)
-        {
-            this.RemoveChessPieceFrom(chessPieceToRemove, chessPieceToRemove.ChessPiecePosition);
+        //public void RemoveChessPiece(ChessPiece chessPieceToRemove)
+        //{
+        //    this.RemoveChessPieceFrom(chessPieceToRemove, chessPieceToRemove.ChessPiecePosition);
 
-            chessPieceToRemove.Owner.RemoveChessPieceOfPlayer(chessPieceToRemove);
-        }
+        //    chessPieceToRemove.Owner.RemoveChessPieceOfPlayer(chessPieceToRemove);
+        //}
 
         public ChessPiece CreateChessPiece(IPlayer owner, ChessPieceType chessPieceType, ChessPiecePosition chessPiecePosition)
         {
@@ -229,7 +243,7 @@ namespace ChessEngine
             return false;
         }
 
-        public bool ComputeSimulatedChessPieceMoves(ChessPieceMovesContainer chessPieceMove)
+        private bool ComputeSimulatedChessPieceMoves(ChessPieceMovesContainer chessPieceMove)
         {
             ChessTurn currentChessTurn = this.CurrentChessTurn;
 
@@ -278,7 +292,7 @@ namespace ChessEngine
             return false;
         }
 
-        public bool RevertLastSimulatedChessMove()
+        private bool RevertLastSimulatedChessMove()
         {
             ChessTurn currentChessTurn = this.CurrentChessTurn;
 

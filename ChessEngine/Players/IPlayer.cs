@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChessEngine.Players
 {
-    public interface IPlayer
+    public interface IPlayer: ICloneable
     {
         ChessPiece KingChessPiece
         {

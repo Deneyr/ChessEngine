@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChessEngine.ChessModels.Monitors;
 
 namespace ChessEngine.Moves
 {
@@ -47,6 +48,11 @@ namespace ChessEngine.Moves
                 return base.ApplyReverseMove(chessBoard);
             }
             return false;
+        }
+
+        public override IChessMoveInfluence CreateInfluence()
+        {
+            return new PromoteChessMoveInfluence(this.ToChessType);
         }
     }
 }
