@@ -1,4 +1,5 @@
 ﻿using ChessEngine;
+using ChessEngine.ChessModels.Monitors;
 using ChessEngine.Moves;
 using ChessEngine.Players;
 using ChessInterface.Events;
@@ -19,12 +20,28 @@ namespace ChessInterface
 
         private IChessBoardHandler chessBoardHandler;
 
-        public ChessBoardInterface(IChessBoardHandler chessBoardHandler)
+        public IPlayer SupportedPlayer
+        {
+            get;
+            set;
+        }
+
+        private Queue<Tuple<ChessPiece, IChessMoveInfluence>> influencesEmitted;
+
+        private float influenceSendingMinPeriodSec;
+        private float sinceLastInfluenceSendingSec;
+
+        public ChessBoardInterface(IChessBoardHandler chessBoardHandler, float influenceSendingMinPeriodSec = 0)
         {
             this.chessBoard = null;
 
             this.chessBoardHandler = chessBoardHandler;
+            this.SupportedPlayer = null;
             this.chessBoardHandler.ParentInterface = this;
+
+            this.influencesEmitted = new Queue<Tuple<ChessPiece, IChessMoveInfluence>>();
+            this.influenceSendingMinPeriodSec = influenceSendingMinPeriodSec;
+            this.sinceLastInfluenceSendingSec = 0;
         }
 
         public void RegisterChessBoard(ChessBoard chessBoardToRegister)
@@ -66,11 +83,18 @@ namespace ChessInterface
 
         private void OnChessGameStarting()
         {
+            lock (this.interfaceLock)
+            {
+                this.influencesEmitted.Clear();
+            }
+
             this.chessBoardHandler.OnChessGameStarting();
         }
 
         private void OnChessGameStarted()
         {
+            this.sinceLastInfluenceSendingSec = 0;
+
             this.chessBoardHandler.OnChessGameStarted();
         }
 
@@ -102,6 +126,52 @@ namespace ChessInterface
         private void OnPreviousTurnStarted(ChessTurn previousTurnStarted)
         {
             this.chessBoardHandler.EnqueueChessEvent(new ChessEvent(ChessEventType.PREVIOUS_TURN, previousTurnStarted, null));
+        }
+
+        public void UpdateInterface(float deltaSec)
+        {
+            if (this.influenceSendingMinPeriodSec > 0)
+            {
+                this.sinceLastInfluenceSendingSec += deltaSec;
+            }
+
+            if (this.influenceSendingMinPeriodSec <= 0
+                || this.sinceLastInfluenceSendingSec > this.influenceSendingMinPeriodSec)
+            {
+                if (this.DequeueChessEvent(out ChessPiece concernedChessPiece, out IChessMoveInfluence chessMoveInfluence))
+                {
+                    this.chessBoard.ComputeChessPieceInfluence(concernedChessPiece, chessMoveInfluence);
+
+                    this.sinceLastInfluenceSendingSec = 0;
+                }
+            }
+        }
+
+        private bool DequeueChessEvent(out ChessPiece concernedChessPiece, out IChessMoveInfluence chessMoveInfluence)
+        {
+            chessMoveInfluence = null;
+            concernedChessPiece = null;
+            bool result = false;
+            lock (this.interfaceLock)
+            {
+                if (this.influencesEmitted.Any())
+                {
+                    Tuple<ChessPiece, IChessMoveInfluence> influence = this.influencesEmitted.Dequeue();
+                    concernedChessPiece = influence.Item1;
+                    chessMoveInfluence = influence.Item2;
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
+        public virtual void EnqueueChessMoveInfluence(ChessPiece concernedChessPiece, IChessMoveInfluence chessMoveInfluence)
+        {
+            lock (this.interfaceLock)
+            {
+                this.influencesEmitted.Enqueue(new Tuple<ChessPiece, IChessMoveInfluence>(concernedChessPiece, chessMoveInfluence));
+            }
         }
 
         //internal bool DequeueChessEvent(out ChessEvent chessEvent)

@@ -23,6 +23,7 @@ namespace ChessInterface
             chessBoardInterface.RegisterChessBoard(chessBoard);
 
             InitChessBoardGame(chessBoard);
+            chessBoardInterface.SupportedPlayer = chessBoard.Players[0];
 
             ChessPiece chessPiece = chessBoard.Players[0].ChessPiecesOwned[0];
             ChessPiece chessPiece2 = chessBoard.Players[1].ChessPiecesOwned[1];

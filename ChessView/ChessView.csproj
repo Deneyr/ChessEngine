@@ -78,9 +78,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ChessAI\ChessAI.csproj">
+      <Project>{a2fa32e5-53f4-40e0-84e0-0b4a9e3fec5e}</Project>
+      <Name>ChessAI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ChessEngine\ChessEngine.csproj">
       <Project>{ec2e97ab-8bf8-48f6-a6f1-a9e28f150531}</Project>
       <Name>ChessEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ChessInterface\ChessInterface.csproj">
+      <Project>{8f7fc898-b98b-4cec-a2cc-54a28cbe5087}</Project>
+      <Name>ChessInterface</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

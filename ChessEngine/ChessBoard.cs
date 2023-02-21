@@ -12,7 +12,7 @@ namespace ChessEngine
 {
     public class ChessBoard
     {
-        private static ChessPieceFactory sChessPieceFactory = new ChessPieceFactory();
+        private ChessPieceFactory chessPieceFactory;
 
         private ChessPieceCell[,] chessBoard;
 
@@ -100,6 +100,8 @@ namespace ChessEngine
 
         public ChessBoard(int width = 8, int height = 8, int promoteBorderDistance = 4)
         {
+            this.chessPieceFactory = new ChessPieceFactory();
+
             this.Players = new List<IPlayer>();
             this.ChessTurns = new List<ChessTurn>();
 
@@ -163,7 +165,7 @@ namespace ChessEngine
 
         public ChessPiece CreateChessPiece(IPlayer owner, ChessPieceType chessPieceType, ChessPiecePosition chessPiecePosition)
         {
-            return sChessPieceFactory.CreateChessPiece(owner, chessPieceType, chessPiecePosition);
+            return this.chessPieceFactory.CreateChessPiece(owner, chessPieceType, chessPiecePosition);
         }
 
         public bool IsPositionOnChessBoard(ChessPiecePosition chessPiecePosition)
@@ -495,7 +497,7 @@ namespace ChessEngine
 
         internal void PromoteChessPiece(ChessPiece chessPiece, ChessPieceType promoteToChessType)
         {
-            sChessPieceFactory.TransmuteChessPiece(promoteToChessType, chessPiece);
+            this.chessPieceFactory.TransmuteChessPiece(promoteToChessType, chessPiece);
         }
 
         private void AddChessPieceTo(ChessPiece chessPiece, ChessPiecePosition chessPiecePosition)

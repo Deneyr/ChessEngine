@@ -1,7 +1,10 @@
+using ChessAI.RandomAI;
 using ChessEngine;
 using ChessEngine.ChessModels.Monitors;
 using ChessEngine.Maths;
 using ChessEngine.Players;
+using ChessInterface;
+using ChessInterface.Handlers;
 using ChessView.View;
 using SFML.Audio;
 using SFML.Graphics;
@@ -21,6 +24,9 @@ namespace ChessView
 
         private ChessBoard2D chessBoard2D;
 
+        private ChessBoardInterface playerInterface1;
+        private ChessBoardInterface playerInterface2;
+
         public MainWindow()
         {
             this.chessBoard = new ChessBoard();
@@ -28,6 +34,7 @@ namespace ChessView
             this.chessBoard2D = new ChessBoard2D(this.chessBoard);
 
             this.InitChessBoardGame(this.chessBoard);
+            this.chessBoard.InitFirstTurn();
         }
 
         public void Run()
@@ -67,6 +74,9 @@ namespace ChessView
 
                 // Draw window
                 AObject2D.UpdateAnimationManager(deltaTime);
+
+                this.playerInterface1.UpdateInterface(deltaTime.AsSeconds());
+                this.playerInterface2.UpdateInterface(deltaTime.AsSeconds());
 
                 window.Clear();
 
@@ -131,6 +141,15 @@ namespace ChessView
 
         private void InitChessBoardGame(ChessBoard chessBoard)
         {
+            RandomAIHandler handler = new RandomAIHandler();
+            this.playerInterface1 = new ChessBoardInterface(handler, 3);
+
+            handler = new RandomAIHandler();
+            this.playerInterface2 = new ChessBoardInterface(handler, 3);
+
+            this.playerInterface1.RegisterChessBoard(chessBoard);
+            this.playerInterface2.RegisterChessBoard(chessBoard);
+
             chessBoard.InitGame();
 
             // Players
@@ -159,7 +178,8 @@ namespace ChessView
             //chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.ROOK, new ChessPiecePosition(0, 0));
             //chessBoard.AddChessPiece(chessPiece);
 
-            chessBoard.InitFirstTurn();
+            this.playerInterface1.SupportedPlayer = chessBoard.Players[0];
+            this.playerInterface2.SupportedPlayer = chessBoard.Players[1];
         }
 
         /// <summary>
@@ -172,15 +192,15 @@ namespace ChessView
             {
                 window.Close();
             }
-            else if(e.Code == SFML.Window.Keyboard.Key.Right)
-            {
-                ChessPiece chessPiece = this.chessBoard.Players[0].ChessPiecesOwned[0];
-                ChessPiece chessPiece2 = this.chessBoard.Players[1].ChessPiecesOwned[1];
+            //else if(e.Code == SFML.Window.Keyboard.Key.Right)
+            //{
+            //    ChessPiece chessPiece = this.chessBoard.Players[0].ChessPiecesOwned[0];
+            //    ChessPiece chessPiece2 = this.chessBoard.Players[1].ChessPiecesOwned[1];
 
-                IChessMoveInfluence moveInfluence = new ShiftChessMoveInfluence(new ChessPiecePosition(3, 7));
+            //    IChessMoveInfluence moveInfluence = new ShiftChessMoveInfluence(new ChessPiecePosition(3, 7));
 
-                chessBoard.ComputeChessPieceInfluence(chessPiece, moveInfluence);
-            }
+            //    chessBoard.ComputeChessPieceInfluence(chessPiece, moveInfluence);
+            //}
         }
     }
 }

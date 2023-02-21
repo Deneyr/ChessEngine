@@ -35,11 +35,6 @@ namespace ChessInterface.Handlers
             }
         }
 
-        protected override void InternalHandleChessEvent(ChessEvent chessEvent)
-        {
-            Console.WriteLine();
-        }
-
         public override void EnqueueChessEvent(ChessEvent chessEvent)
         {
             base.EnqueueChessEvent(chessEvent);

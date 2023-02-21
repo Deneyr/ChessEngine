@@ -47,7 +47,12 @@ namespace ChessInterface.Handlers
 
         private void UpdateInternalChessBoard(ChessEvent chessEvent)
         {
-            if(chessEvent.EventType == ChessEventType.MOVE_APPLIED)
+            if(chessEvent.EventType == ChessEventType.NEXT_TURN
+                && chessEvent.EventTurn == null)
+            {
+                this.internalChessBoard.InitFirstTurn();
+            }
+            else if(chessEvent.EventType == ChessEventType.MOVE_APPLIED)
             {
                 IChessMoveInfluence moveInfluence = chessEvent.EventMove.CreateInfluence();
 
@@ -79,18 +84,18 @@ namespace ChessInterface.Handlers
         {
             lock (this.handlerLock)
             {
-                this.internalChessBoard.InitGame();
-
                 this.inputEvents.Clear();
+
+                this.internalChessBoard.InitGame();
             }
         }
 
         public void OnChessGameStarted()
         {
-            lock (this.handlerLock)
-            {
-                this.internalChessBoard.InitFirstTurn();
-            }
+            //lock (this.handlerLock)
+            //{
+            //    this.internalChessBoard.InitFirstTurn();
+            //}
         }
 
         public void OnPlayerAddedToBoard(IPlayer playerAdded)
