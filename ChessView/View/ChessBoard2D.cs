@@ -164,6 +164,12 @@ namespace ChessView.View
 
                     concernedChessPiece2D.PlayPositionAnimation(this.animationShiftDuration, newPosition2D);
                 }
+                else if(move is KillChessPieceMove)
+                {
+                    KillChessPieceMove shiftChessPieceMove = move as KillChessPieceMove;
+
+                    concernedChessPiece2D.PlayPositionAnimation(this.animationShiftDuration, new Vector2f(-100, -100));
+                }
             }
         }
 

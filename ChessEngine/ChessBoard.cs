@@ -226,6 +226,11 @@ namespace ChessEngine
                 {
                     return this.ApplyChessMove(currentChessTurn, chessPieceMove);
                 }
+                //// TO REMOVE
+                //else
+                //{
+                //    Console.WriteLine();
+                //}
             }
 
             return false;

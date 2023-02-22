@@ -17,7 +17,7 @@ namespace ChessInterface.Handlers
 
         public AChessBoardAsyncHandler()
         {
-            this.semaphore = new Semaphore(0, 1);
+            this.semaphore = new Semaphore(0, 10);
 
             this.mainThread = new Thread(new ThreadStart(this.RunThread));
             this.isThreadActive = true;

@@ -43,7 +43,7 @@ namespace ChessView
 
             var mode = new VideoMode(chessBoardSize.X, chessBoardSize.Y);
             var window = new RenderWindow(mode, "Chess view");
-            window.SetVerticalSyncEnabled(true);
+            window.SetVerticalSyncEnabled(false);
 
             window.KeyPressed += Window_KeyPressed;
 
@@ -51,20 +51,7 @@ namespace ChessView
             window.MouseButtonReleased += OnMouseButtonReleased;
             window.MouseMoved += OnMouseMoved;
 
-            //this.object2DManager.SizeScreen = window.GetView().Size;
-
-
-            //SFML.Graphics.View view = window.GetView();
-
-            //view.Size = new Vector2f(1920, 1080);
-
-            //this.resolutionScreen = new Vector2f(view.Size.X, view.Size.Y);
-            //view.Center = new Vector2f(9492, -12595);
-            //this.SetView(window, view);
-
             Clock clock = new Clock();
-
-            //this.landWorld.OnFocusAreaChanged(view.Center / MODEL_TO_VIEW, this.resolutionScreen / MODEL_TO_VIEW);
 
             // Start the game loop
             while (window.IsOpen)
@@ -84,31 +71,6 @@ namespace ChessView
 
                 // Process events
                 window.DispatchEvents();
-
-
-                ////// To remove after.
-                //if (Keyboard.IsKeyPressed(Keyboard.Key.Z))
-                //{
-                //    view.Center += new Vector2f(0, -2f);
-                //}
-                //else if (Keyboard.IsKeyPressed(Keyboard.Key.S))
-                //{
-                //    view.Center += new Vector2f(0, 2f);
-                //}
-
-                //if (Keyboard.IsKeyPressed(Keyboard.Key.D))
-                //{
-                //    view.Center += new Vector2f(2f, 0);
-                //}
-                //else if (Keyboard.IsKeyPressed(Keyboard.Key.Q))
-                //{
-                //    view.Center += new Vector2f(-2f, 0);
-                //}
-                ////// Console.WriteLine(view.Center.X + " : " + view.Center.Y);
-
-                //this.landWorld.OnFocusAreaChanged(view.Center / MODEL_TO_VIEW, this.resolutionScreen / MODEL_TO_VIEW);
-
-                //this.SetView(window, view);
 
                 // Finally, display the rendered frame on screen
                 window.Display();
@@ -142,10 +104,10 @@ namespace ChessView
         private void InitChessBoardGame(ChessBoard chessBoard)
         {
             RandomAIHandler handler = new RandomAIHandler();
-            this.playerInterface1 = new ChessBoardInterface(handler, 3);
+            this.playerInterface1 = new ChessBoardInterface(handler, 1f);
 
             handler = new RandomAIHandler();
-            this.playerInterface2 = new ChessBoardInterface(handler, 3);
+            this.playerInterface2 = new ChessBoardInterface(handler, 1f);
 
             this.playerInterface1.RegisterChessBoard(chessBoard);
             this.playerInterface2.RegisterChessBoard(chessBoard);

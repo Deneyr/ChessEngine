@@ -30,6 +30,7 @@ namespace ChessView.View.ResourcesManager
             if (this.texturesDictionary.ContainsKey(textureToLoadPath) == false)
             {
                 Texture texture = new Texture(textureToLoadPath);
+                texture.Smooth = true;
 
                 this.texturesDictionary.Add(textureToLoadPath, texture);
 
