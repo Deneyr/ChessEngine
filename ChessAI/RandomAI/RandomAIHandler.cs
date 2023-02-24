@@ -14,6 +14,13 @@ namespace ChessAI.RandomAI
 {
     public class RandomAIHandler: AChessBoardAsyncHandler
     {
+        private Random random;
+
+        public RandomAIHandler()
+        {
+            this.random = new Random((int)DateTime.Now.Ticks);
+        }
+
         protected override void InternalHandleChessEvent(ChessEvent chessEvent)
         {
             int currentIndexPlayer = this.internalChessBoard.CurrentChessTurn.IndexPlayer;
@@ -45,22 +52,9 @@ namespace ChessAI.RandomAI
                 }
             }
 
-            // TO REMOVE
-            //if (currentInternalPlayer.YDirection > 0)
-            //{
-            //    List<ChessPieceMovesContainer> tempMoves = new List<ChessPieceMovesContainer>(possibleMovesList);
-            //    possibleMovesList = possibleMovesList.Where(pElem => pElem.ChessPieceMoves.Count > 1 && pElem.ConcernedChessPiece == currentInternalPlayer.KingChessPiece).ToList();
-
-            //    if(possibleMovesList.Any() == false)
-            //    {
-            //        possibleMovesList = tempMoves;
-            //    }
-            //}
-
             if (possibleMovesList.Any())
             {
-                Random random = new Random();
-                int randomIndex = random.Next(0, possibleMovesList.Count);
+                int randomIndex = this.random.Next(0, possibleMovesList.Count);
 
                 return possibleMovesList[randomIndex];
             }

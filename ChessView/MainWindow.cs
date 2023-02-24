@@ -125,20 +125,107 @@ namespace ChessView
 
             // Chess pieces player 1
             // Position is compute from the top left corner of the board, starting from 0
-            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.BISHOP, new ChessPiecePosition(5, 5));
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(0, 6));
             chessBoard.AddChessPiece(chessPiece);
-            //chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.KNIGHT, new ChessPiecePosition(3, 3));
-            //chessBoard.AddChessPiece(chessPiece);
-            //chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.ROOK, new ChessPiecePosition(7, 4));
-            //chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(1, 6));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(2, 6));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(3, 6));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(4, 6));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(5, 6));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(6, 6));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(7, 6));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.ROOK, new ChessPiecePosition(0, 7));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.KNIGHT, new ChessPiecePosition(1, 7));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.BISHOP, new ChessPiecePosition(2, 7));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.QUEEN, new ChessPiecePosition(3, 7));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.KING, new ChessPiecePosition(4, 7));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.BISHOP, new ChessPiecePosition(5, 7));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.KNIGHT, new ChessPiecePosition(6, 7));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.ROOK, new ChessPiecePosition(7, 7));
+            chessBoard.AddChessPiece(chessPiece);
 
             // Chess pieces player 2
-            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.ROOK, new ChessPiecePosition(7, 0));
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(0, 1));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(1, 1));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(2, 1));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(3, 1));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(4, 1));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(5, 1));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(6, 1));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(7, 1));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.ROOK, new ChessPiecePosition(0, 0));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.KNIGHT, new ChessPiecePosition(1, 0));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.BISHOP, new ChessPiecePosition(2, 0));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.QUEEN, new ChessPiecePosition(3, 0));
             chessBoard.AddChessPiece(chessPiece);
             chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.KING, new ChessPiecePosition(4, 0));
             chessBoard.AddChessPiece(chessPiece);
-            //chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.ROOK, new ChessPiecePosition(0, 0));
-            //chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.BISHOP, new ChessPiecePosition(5, 0));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.KNIGHT, new ChessPiecePosition(6, 0));
+            chessBoard.AddChessPiece(chessPiece);
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.ROOK, new ChessPiecePosition(7, 0));
+            chessBoard.AddChessPiece(chessPiece);
+
+            this.playerInterface1.SupportedPlayer = chessBoard.Players[0];
+            this.playerInterface2.SupportedPlayer = chessBoard.Players[1];
+        }
+
+        private void TestInitChessBoardGame(ChessBoard chessBoard)
+        {
+            RandomAIHandler handler = new RandomAIHandler();
+            this.playerInterface1 = new ChessBoardInterface(handler, 1f);
+
+            handler = new RandomAIHandler();
+            this.playerInterface2 = new ChessBoardInterface(handler, 1f);
+
+            this.playerInterface1.RegisterChessBoard(chessBoard);
+            this.playerInterface2.RegisterChessBoard(chessBoard);
+
+            chessBoard.InitGame();
+
+            // Players
+            Player player1 = new Player("White", 0, -1);
+            Player player2 = new Player("Black", 0, 1);
+
+            chessBoard.AddPlayer(player1);
+            chessBoard.AddPlayer(player2);
+
+            ChessPiece chessPiece;
+
+            // Chess pieces player 1
+            // Position is compute from the top left corner of the board, starting from 0
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(2, 4));
+            chessBoard.AddChessPiece(chessPiece);            
+
+            // Chess pieces player 2
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(1, 1));
+            chessBoard.AddChessPiece(chessPiece);
 
             this.playerInterface1.SupportedPlayer = chessBoard.Players[0];
             this.playerInterface2.SupportedPlayer = chessBoard.Players[1];

@@ -33,9 +33,9 @@ namespace ChessEngine.ChessModels.Monitors
         public bool Visit(ChessBoard chessBoard, ChessPieceMovesContainer chessPieceMoveContainer)
         {
             List<IReactionChessModel>.Enumerator reactionChessModelsEnum = this.ReactionChessModels.GetEnumerator();
-            bool isMoveContainerValid = false;
+            bool isMoveContainerValid = true;
 
-            while (isMoveContainerValid == false && reactionChessModelsEnum.MoveNext())
+            while (isMoveContainerValid && reactionChessModelsEnum.MoveNext())
             {
                 isMoveContainerValid = reactionChessModelsEnum.Current.Visit(chessBoard, chessPieceMoveContainer);
             }

@@ -416,7 +416,9 @@ namespace ChessEngine
             {
                 ChessTurn currentChessTurn = this.CurrentChessTurn;
 
-                IEnumerable<ChessPiece> otherPlayersChessPieces = this.ChessPiecesOnBoard.Where(pElem => pElem.Owner != king.Owner);
+                // It can happens that a castling move is check to know if king is checked. If it happens a IsGivenMovesGetChecked is called for each king position when in try to castle, so the ChessPiecesOnBoard can be modified. 
+                List<ChessPiece> otherPlayersChessPieces = this.ChessPiecesOnBoard.Where(pElem => pElem.Owner != king.Owner).ToList();
+
                 foreach (ChessPiece chessPiece in otherPlayersChessPieces)
                 {
                     // Simulate a "fake" turn to get the all possible moves of the chessPiece inspected 
