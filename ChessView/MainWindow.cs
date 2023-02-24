@@ -33,7 +33,7 @@ namespace ChessView
 
             this.chessBoard2D = new ChessBoard2D(this.chessBoard);
 
-            this.InitChessBoardGame(this.chessBoard);
+            this.TestInitChessBoardGame(this.chessBoard);
             this.chessBoard.InitFirstTurn();
         }
 
@@ -220,11 +220,14 @@ namespace ChessView
 
             // Chess pieces player 1
             // Position is compute from the top left corner of the board, starting from 0
-            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(2, 4));
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(2, 1));
             chessBoard.AddChessPiece(chessPiece);            
 
             // Chess pieces player 2
-            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(1, 1));
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.KNIGHT, new ChessPiecePosition(1, 0));
+            chessBoard.AddChessPiece(chessPiece);
+
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.KING, new ChessPiecePosition(6, 5));
             chessBoard.AddChessPiece(chessPiece);
 
             this.playerInterface1.SupportedPlayer = chessBoard.Players[0];

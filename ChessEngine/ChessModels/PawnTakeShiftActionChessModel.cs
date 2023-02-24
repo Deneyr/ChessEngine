@@ -35,5 +35,10 @@ namespace ChessEngine.ChessModels
 
             return yGlobalShift;
         }
+
+        protected override bool IsEndTurnMove(ChessBoard chessBoard, ChessPiece concernedChessPiece, ChessPiecePosition toPosition)
+        {
+            return PromoteActionChessModel.IsInPromoteArea(chessBoard, concernedChessPiece, toPosition) == false;
+        }
     }
 }
