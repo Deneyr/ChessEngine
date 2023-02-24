@@ -23,10 +23,18 @@ namespace ChessView.View
 
             Texture chessPiecesTexture = chessBoard2D.GetTextureFromChessAssetType(ChessAssetType.CHESS_PIECE);
 
-            this.ObjectSprite = new SFML.Graphics.Sprite(chessPiecesTexture, this.GetTextureRectFrom(chessPiecesTexture, this.ChessPiece));
+            this.ObjectSprite = new Sprite(chessPiecesTexture, this.GetTextureRectFrom(chessPiecesTexture, this.ChessPiece));
             this.ObjectSprite.Origin = new Vector2f(this.ObjectSprite.TextureRect.Width / 2, this.ObjectSprite.TextureRect.Height / 2);
 
             this.Position = chessBoard2D.ConvertChessPositionTo2D(this.ChessPiece.ChessPiecePosition);
+        }
+
+        public void UpdateChessPiece(ChessBoard2D chessBoard2D)
+        {
+            Texture chessPiecesTexture = chessBoard2D.GetTextureFromChessAssetType(ChessAssetType.CHESS_PIECE);
+            this.ObjectSprite = new Sprite(chessPiecesTexture, this.GetTextureRectFrom(chessPiecesTexture, this.ChessPiece));
+
+            this.ObjectSprite.Origin = new Vector2f(this.ObjectSprite.TextureRect.Width / 2, this.ObjectSprite.TextureRect.Height / 2);
         }
 
         private IntRect GetTextureRectFrom(Texture chessPiecesTexture, ChessPiece chessPiece)

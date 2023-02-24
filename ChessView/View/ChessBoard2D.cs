@@ -166,9 +166,15 @@ namespace ChessView.View
                 }
                 else if(move is KillChessPieceMove)
                 {
-                    KillChessPieceMove shiftChessPieceMove = move as KillChessPieceMove;
+                    KillChessPieceMove killChessPieceMove = move as KillChessPieceMove;
 
                     concernedChessPiece2D.PlayPositionAnimation(this.animationShiftDuration, new Vector2f(-100, -100));
+                }
+                else if(move is PromoteChessPieceMove)
+                {
+                    PromoteChessPieceMove promoteChessPieceMove = move as PromoteChessPieceMove;
+
+                    concernedChessPiece2D.UpdateChessPiece(this);
                 }
             }
         }

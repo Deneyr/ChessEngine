@@ -61,7 +61,7 @@ namespace ChessEngine.ChessModels
 
         public bool IsMoveAllowed(ChessBoard chessBoard, ChessPiece concernedChessPiece, ChessPieceType newType)
         {
-            if(chessBoard.IsTurnFirstMove)
+            if(chessBoard.IsTurnFirstMove == false)
             {
                 if (this.InternalIsMoveAllowed(chessBoard, concernedChessPiece, newType)
                     && IsInPromoteArea(chessBoard, concernedChessPiece, concernedChessPiece.ChessPiecePosition))
