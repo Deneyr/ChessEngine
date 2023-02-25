@@ -226,11 +226,6 @@ namespace ChessEngine
                 {
                     return this.ApplyChessMove(currentChessTurn, chessPieceMove);
                 }
-                //// TO REMOVE
-                //else
-                //{
-                //    Console.WriteLine();
-                //}
             }
 
             return false;
@@ -454,11 +449,14 @@ namespace ChessEngine
 
             foreach (ChessPiece chessPiece in currentPlayer.ChessPiecesOwned)
             {
-                List<ChessPieceMovesContainer> possibleMoves = chessPiece.GetAllPossibleMoves(this);
-
-                if (possibleMoves.Any())
+                if (chessPiece.IsAlive)
                 {
-                    return true;
+                    List<ChessPieceMovesContainer> possibleMoves = chessPiece.GetAllPossibleMoves(this);
+
+                    if (possibleMoves.Any())
+                    {
+                        return true;
+                    }
                 }
             }
 
