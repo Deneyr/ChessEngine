@@ -10,15 +10,13 @@ namespace ChessInterface.Handlers
 {
     public abstract class AChessBoardAsyncHandler: AChessBoardHandler
     {
-        private Semaphore semaphore;
+        private bool receivedChessEvent;
 
         private Thread mainThread;
         private bool isThreadActive;
 
         public AChessBoardAsyncHandler()
         {
-            this.semaphore = new Semaphore(0, 100);
-
             this.mainThread = new Thread(new ThreadStart(this.RunThread));
             this.isThreadActive = true;
 
@@ -29,9 +27,23 @@ namespace ChessInterface.Handlers
         {
             while (this.isThreadActive)
             {
-                this.semaphore.WaitOne();
+                bool currentReceivedChessEvent = false;
 
-                this.UpdateHandler();
+                lock (this.handlerLock)
+                {
+                    if(this.receivedChessEvent
+                        || Monitor.Wait(this.handlerLock))
+                    {
+                        currentReceivedChessEvent = true;
+
+                        this.receivedChessEvent = false;
+                    }
+                }
+
+                if (currentReceivedChessEvent)
+                {
+                    this.UpdateHandler();
+                }
             }
         }
 
@@ -39,7 +51,12 @@ namespace ChessInterface.Handlers
         {
             base.EnqueueChessEvent(chessEvent);
 
-            this.semaphore.Release();
+            lock(this.handlerLock)
+            {
+                this.receivedChessEvent = true;
+
+                Monitor.Pulse(this.handlerLock);
+            }
         }
 
         public override void Dispose()
