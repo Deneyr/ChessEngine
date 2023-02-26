@@ -8,3 +8,6 @@ Contain :
 4. AIs library 
 
 ![checkmate](https://user-images.githubusercontent.com/9294021/221268062-58edb283-129f-4219-bdeb-17bef144a985.PNG)
+
+Assets :
+From Chess.com and https://dribbble.com/billymetcalfe
