@@ -16,26 +16,26 @@ namespace ChessInterface
     {
         static void Main(string[] args)
         {
-            TestAsyncHandler handler = new TestAsyncHandler();
-            ChessBoardInterface chessBoardInterface = new ChessBoardInterface(handler);
+            //TestAsyncHandler handler = new TestAsyncHandler();
+            //ChessBoardInterface chessBoardInterface = new ChessBoardInterface(handler);
 
-            ChessBoard chessBoard = new ChessBoard();
-            chessBoardInterface.RegisterChessBoard(chessBoard);
+            //ChessBoard chessBoard = new ChessBoard();
+            //chessBoardInterface.RegisterChessBoard(chessBoard);
 
-            InitChessBoardGame(chessBoard);
-            chessBoardInterface.SupportedPlayer = chessBoard.Players[0];
+            //InitChessBoardGame(chessBoard);
+            //chessBoardInterface.SupportedPlayer = chessBoard.Players[0];
 
-            ChessPiece chessPiece = chessBoard.Players[0].ChessPiecesOwned[0];
-            ChessPiece chessPiece2 = chessBoard.Players[1].ChessPiecesOwned[1];
+            //ChessPiece chessPiece = chessBoard.Players[0].ChessPiecesOwned[0];
+            //ChessPiece chessPiece2 = chessBoard.Players[1].ChessPiecesOwned[1];
 
-            IChessMoveInfluence moveInfluence = new ShiftChessMoveInfluence(new ChessPiecePosition(3, 7));
-            bool result = chessPiece.CreateMove(chessBoard, moveInfluence, out ChessPieceMovesContainer move);
-            List<ChessPieceMovesContainer> moves = chessPiece.GetAllPossibleMoves(chessBoard);
+            //IChessMoveInfluence moveInfluence = new ShiftChessMoveInfluence(new ChessPiecePosition(3, 7));
+            //bool result = chessPiece.CreateMove(chessBoard, moveInfluence, out ChessPieceMovesContainer move);
+            //List<ChessPieceMovesContainer> moves = chessPiece.GetAllPossibleMoves(chessBoard);
 
-            chessBoard.ComputeChessPieceInfluence(chessPiece, moveInfluence);
+            //chessBoard.ComputeChessPieceInfluence(chessPiece, moveInfluence);
 
-            Console.WriteLine(chessBoardInterface);
-            Console.Read();
+            //Console.WriteLine(chessBoardInterface);
+            //Console.Read();
         }
 
         static private void InitChessBoardGame(ChessBoard chessBoard)

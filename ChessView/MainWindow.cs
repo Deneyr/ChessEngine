@@ -32,9 +32,6 @@ namespace ChessView
             this.chessBoard = new ChessBoard();
 
             this.chessBoard2D = new ChessBoard2D(this.chessBoard);
-
-            this.TestInitChessBoardGame(this.chessBoard);
-            this.chessBoard.InitFirstTurn();
         }
 
         public void Run()
@@ -45,11 +42,14 @@ namespace ChessView
             var window = new RenderWindow(mode, "Chess view");
             window.SetVerticalSyncEnabled(false);
 
+            this.TestInitChessBoardGame(window, this.chessBoard);
+            this.chessBoard.InitFirstTurn();
+
             window.KeyPressed += Window_KeyPressed;
 
-            window.MouseButtonPressed += OnMouseButtonPressed;
-            window.MouseButtonReleased += OnMouseButtonReleased;
-            window.MouseMoved += OnMouseMoved;
+            //window.MouseButtonPressed += OnMouseButtonPressed;
+            //window.MouseButtonReleased += OnMouseButtonReleased;
+            //window.MouseMoved += OnMouseMoved;
 
             Clock clock = new Clock();
 
@@ -79,35 +79,24 @@ namespace ChessView
             this.chessBoard2D.Dispose(this.chessBoard);
         }       
 
-        private void SetView(SFML.Graphics.RenderWindow window, SFML.Graphics.View view)
+        private void SetView(RenderWindow window, SFML.Graphics.View view)
         {
             this.boundsView = new FloatRect(view.Center.X - view.Size.X / 2, view.Center.Y - view.Size.Y / 2, view.Size.X, view.Size.Y);
 
             window.SetView(view);
         }
 
-        private void OnMouseMoved(object sender, SFML.Window.MouseMoveEventArgs e)
-        {
-
-        }
-
-        private void OnMouseButtonReleased(object sender, SFML.Window.MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void OnMouseButtonPressed(object sender, SFML.Window.MouseButtonEventArgs e)
-        {
-            
-        }
-
-        private void InitChessBoardGame(ChessBoard chessBoard)
+        private void InitChessBoardGame(RenderWindow window, ChessBoard chessBoard)
         {
             RandomAIHandler handler = new RandomAIHandler();
-            this.playerInterface1 = new ChessBoardInterface(handler, 1f);
+            ChessPlayerHandler chessPlayerHandler = new ChessPlayerHandler(this.chessBoard2D);
 
-            handler = new RandomAIHandler();
             this.playerInterface2 = new ChessBoardInterface(handler, 1f);
+            this.playerInterface1 = new ChessBoardInterface(chessPlayerHandler, 1f);
+
+            window.MouseButtonPressed += chessPlayerHandler.OnMouseButtonPressed;
+            window.MouseButtonReleased += chessPlayerHandler.OnMouseButtonReleased;
+            window.MouseMoved += chessPlayerHandler.OnMouseMoved;
 
             this.playerInterface1.RegisterChessBoard(chessBoard);
             this.playerInterface2.RegisterChessBoard(chessBoard);
@@ -196,13 +185,17 @@ namespace ChessView
             this.playerInterface2.SupportedPlayer = chessBoard.Players[1];
         }
 
-        private void TestInitChessBoardGame(ChessBoard chessBoard)
+        private void TestInitChessBoardGame(RenderWindow window, ChessBoard chessBoard)
         {
             RandomAIHandler handler = new RandomAIHandler();
-            this.playerInterface1 = new ChessBoardInterface(handler, 1f);
+            ChessPlayerHandler chessPlayerHandler = new ChessPlayerHandler(this.chessBoard2D);
 
-            handler = new RandomAIHandler();
             this.playerInterface2 = new ChessBoardInterface(handler, 1f);
+            this.playerInterface1 = new ChessBoardInterface(chessPlayerHandler, 1f);
+
+            window.MouseButtonPressed += chessPlayerHandler.OnMouseButtonPressed;
+            window.MouseButtonReleased += chessPlayerHandler.OnMouseButtonReleased;
+            window.MouseMoved += chessPlayerHandler.OnMouseMoved;
 
             this.playerInterface1.RegisterChessBoard(chessBoard);
             this.playerInterface2.RegisterChessBoard(chessBoard);
@@ -220,15 +213,18 @@ namespace ChessView
 
             // Chess pieces player 1
             // Position is compute from the top left corner of the board, starting from 0
-            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(2, 1));
-            chessBoard.AddChessPiece(chessPiece);            
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(2, 3));
+            chessBoard.AddChessPiece(chessPiece);
+
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(2, 5));
+            chessBoard.AddChessPiece(chessPiece);
 
             // Chess pieces player 2
-            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.KNIGHT, new ChessPiecePosition(1, 0));
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(1, 6));
             chessBoard.AddChessPiece(chessPiece);
 
-            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.KING, new ChessPiecePosition(6, 5));
-            chessBoard.AddChessPiece(chessPiece);
+            //chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.BISHOP, new ChessPiecePosition(1, 5));
+            //chessBoard.AddChessPiece(chessPiece);
 
             this.playerInterface1.SupportedPlayer = chessBoard.Players[0];
             this.playerInterface2.SupportedPlayer = chessBoard.Players[1];

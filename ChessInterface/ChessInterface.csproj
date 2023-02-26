@@ -52,7 +52,6 @@
     <Compile Include="Handlers\AChessBoardHandler.cs" />
     <Compile Include="Handlers\AChessBoardSyncHandler.cs" />
     <Compile Include="Handlers\IChessBoardHandler.cs" />
-    <Compile Include="Handlers\TestAsyncHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

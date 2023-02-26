@@ -12,11 +12,6 @@ namespace ChessEngine.ChessModels
     {
         protected int xShift;
 
-        private ChessPiece currentOtherChessPiece;
-
-        private int currentXGlobalShift;
-        private int currentYGlobalShift;
-
         public CastleShiftActionChessModel(int xShift)
         {
             this.xShift = xShift;
@@ -26,12 +21,12 @@ namespace ChessEngine.ChessModels
         {
             chessPieceMove = null;
 
-            if (this.IsMoveAllowed(chessBoard, concernedChessPiece, toPosition))
+            if (this.IsMoveAllowed(chessBoard, concernedChessPiece, toPosition, out ChessPiece otherChessPiece, out int currentXGlobalShift, out int currentYGlobalShift))
             {
                 chessPieceMove = new ChessPieceMovesContainer(concernedChessPiece, true);
 
                 chessPieceMove.ChessPieceMoves.Add(new ShiftChessPieceMove(concernedChessPiece, concernedChessPiece.ChessPiecePosition, toPosition));
-                chessPieceMove.ChessPieceMoves.Add(new ShiftChessPieceMove(this.currentOtherChessPiece, this.currentOtherChessPiece.ChessPiecePosition, new ChessPiecePosition(toPosition.X - this.currentXGlobalShift, toPosition.Y - this.currentYGlobalShift)));
+                chessPieceMove.ChessPieceMoves.Add(new ShiftChessPieceMove(otherChessPiece, otherChessPiece.ChessPiecePosition, new ChessPiecePosition(toPosition.X - currentXGlobalShift, toPosition.Y - currentYGlobalShift)));
 
                 return true;
             }
@@ -60,10 +55,15 @@ namespace ChessEngine.ChessModels
 
         public bool IsMoveAllowed(ChessBoard chessBoard, ChessPiece concernedChessPiece, ChessPiecePosition toPosition)
         {
-            this.currentOtherChessPiece = null;
+            return this.IsMoveAllowed(chessBoard, concernedChessPiece, toPosition);
+        }
 
-            this.currentXGlobalShift = 0;
-            this.currentYGlobalShift = 0;
+        public bool IsMoveAllowed(ChessBoard chessBoard, ChessPiece concernedChessPiece, ChessPiecePosition toPosition, out ChessPiece otherChessPiece, out int currentXGlobalShift, out int currentYGlobalShift)
+        {
+            otherChessPiece = null;
+
+            currentXGlobalShift = 0;
+            currentYGlobalShift = 0;
 
             if (chessBoard.IsTurnFirstMove
                 && concernedChessPiece.HasAlreadyMoved == false)
@@ -73,11 +73,11 @@ namespace ChessEngine.ChessModels
                 if (castlingPosition.X >= 0 && castlingPosition.Y >= 0 
                         && toPosition == castlingPosition)
                 {
-                    this.currentOtherChessPiece = chessBoard.GetChessPieceAt(otherChessPiecePosition);
+                    otherChessPiece = chessBoard.GetChessPieceAt(otherChessPiecePosition);
 
-                    if (this.currentOtherChessPiece != null && this.currentOtherChessPiece.HasAlreadyMoved == false)
+                    if (otherChessPiece != null && otherChessPiece.HasAlreadyMoved == false)
                     {
-                        if (this.InternalIsMoveAllowed(chessBoard, concernedChessPiece, this.currentOtherChessPiece, toPosition))
+                        if (this.InternalIsMoveAllowed(chessBoard, concernedChessPiece, otherChessPiece, toPosition))
                         {
                             MathHelper.ChangeBaseVector(this.xShift, 0, concernedChessPiece.Owner.XDirection, concernedChessPiece.Owner.YDirection, out int xGlobalShift, out int yGlobalShift);
 
@@ -93,8 +93,8 @@ namespace ChessEngine.ChessModels
                             if (throughPosition == toPosition
                                 && chessBoard.IsGivenMovesGetChecked(this.CreateTemporaryMove(concernedChessPiece, throughPosition)) == false)
                             {
-                                this.currentXGlobalShift = xGlobalShift;
-                                this.currentYGlobalShift = yGlobalShift;
+                                currentXGlobalShift = xGlobalShift;
+                                currentYGlobalShift = yGlobalShift;
 
                                 return true;
                             }

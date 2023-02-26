@@ -26,7 +26,7 @@ namespace ChessView.View
             this.ObjectSprite = new Sprite(chessPiecesTexture, this.GetTextureRectFrom(chessPiecesTexture, this.ChessPiece));
             this.ObjectSprite.Origin = new Vector2f(this.ObjectSprite.TextureRect.Width / 2, this.ObjectSprite.TextureRect.Height / 2);
 
-            this.Position = chessBoard2D.ConvertChessPositionTo2D(this.ChessPiece.ChessPiecePosition);
+            this.Position = chessBoard2D.GetChessPiece2DPositionFrom(this.ChessPiece.ChessPiecePosition);
         }
 
         public void UpdateChessPiece(ChessBoard2D chessBoard2D)

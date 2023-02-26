@@ -1,5 +1,6 @@
 ﻿using ChessEngine.Maths;
 using ChessEngine.Moves;
+using ChessEngine.Players;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,14 +20,19 @@ namespace ChessEngine.ChessModels
                 if (Math.Abs(shiftChessPieceMove.ToPosition.X - shiftChessPieceMove.FromPosition.X) > 0
                     && Math.Abs(shiftChessPieceMove.ToPosition.Y - shiftChessPieceMove.FromPosition.Y) > 0)
                 {
-                    ChessPiecePosition chessPiecePosition = new ChessPiecePosition(shiftChessPieceMove.ToPosition.X, shiftChessPieceMove.FromPosition.Y);
-                    ChessPiece chessPieceAtDestination = chessBoard.GetChessPieceAt(chessPiecePosition);
-                    if (chessPieceAtDestination != null)
+                    if (chessBoard.GetChessPieceAt(shiftChessPieceMove.ToPosition) == null)
                     {
-                        if (chessPieceAtDestination.Owner != shiftChessPieceMove.ConcernedChessPiece.Owner)
+                        IPlayer ownerChessPieceMove = shiftChessPieceMove.ConcernedChessPiece.Owner;
+                        ChessPiecePosition chessPiecePosition = new ChessPiecePosition(shiftChessPieceMove.ToPosition.X - ownerChessPieceMove.XDirection, shiftChessPieceMove.ToPosition.Y - ownerChessPieceMove.YDirection);
+
+                        ChessPiece chessPieceAtDestination = chessBoard.GetChessPieceAt(chessPiecePosition);
+                        if (chessPieceAtDestination != null)
                         {
-                            KillChessPieceMove killChessPieceMove = new KillChessPieceMove(chessPieceAtDestination, chessPieceAtDestination.ChessPiecePosition);
-                            chessPieceMoveContainer.ChessPieceMoves.Add(killChessPieceMove);
+                            if (chessPieceAtDestination.Owner != shiftChessPieceMove.ConcernedChessPiece.Owner)
+                            {
+                                KillChessPieceMove killChessPieceMove = new KillChessPieceMove(chessPieceAtDestination, chessPieceAtDestination.ChessPiecePosition);
+                                chessPieceMoveContainer.ChessPieceMoves.Add(killChessPieceMove);
+                            }
                         }
                     }
                 }

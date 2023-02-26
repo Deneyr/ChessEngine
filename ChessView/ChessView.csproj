@@ -68,6 +68,7 @@
     <Compile Include="View\AObject2D.cs" />
     <Compile Include="View\AssetType.cs" />
     <Compile Include="View\ChessPiece2D.cs" />
+    <Compile Include="View\ChessPlayerHandler.cs" />
     <Compile Include="View\Helpers\HSLColor.cs" />
     <Compile Include="View\IObject2D.cs" />
     <Compile Include="View\ChessBoard2D.cs" />

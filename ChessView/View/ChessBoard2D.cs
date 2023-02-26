@@ -17,7 +17,7 @@ namespace ChessView.View
     {
         public static readonly float MODEL_2_VIEW_X = 84;
         public static readonly float MODEL_2_VIEW_Y = 83;
-        public static readonly Vector2f CHESSBOARD2D_OFFSET = new Vector2f(42, 42);
+        public static readonly Vector2f CHESSBOARD2D_OFFSET = new Vector2f(0, 0);
 
         public static readonly TextureManager TextureManager;
         private static Dictionary<ChessAssetType, Texture> chessAssetTypeToTextures;
@@ -70,6 +70,19 @@ namespace ChessView.View
             this.chessBoard.MoveReverted += OnMoveReverted;
         }
 
+        public ChessPiece2D GetChessPiece2DAt(Vector2f positionOnScreen)
+        {
+            ChessPiecePosition chessPiecePosition = this.Convert2DToChessPosition(positionOnScreen);
+
+            ChessPiece chessPiece = this.chessPieceToObject2D.Keys.FirstOrDefault(pElem => pElem.ChessPiecePosition == chessPiecePosition);
+
+            if(chessPiece != null)
+            {
+                return this.chessPieceToObject2D[chessPiece];
+            }
+            return null;
+        }
+
         public void DrawIn(RenderWindow window, Time deltaTime)
         {
             //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
@@ -97,6 +110,15 @@ namespace ChessView.View
         public Texture GetTextureFromChessAssetType(ChessAssetType chessAssetType)
         {
             return chessAssetTypeToTextures[chessAssetType];
+        }
+
+        public Vector2f GetChessPiece2DPositionFrom(ChessPiecePosition chessPiecePosition)
+        {
+            Vector2f position = this.ConvertChessPositionTo2D(chessPiecePosition);
+
+            return new Vector2f(
+                position.X + MODEL_2_VIEW_X / 2,
+                position.Y + MODEL_2_VIEW_Y / 2);
         }
 
         public Vector2f ConvertChessPositionTo2D(ChessPiecePosition chessPiecePosition)
@@ -160,7 +182,7 @@ namespace ChessView.View
                 if (move is ShiftChessPieceMove)
                 {
                     ShiftChessPieceMove shiftChessPieceMove = move as ShiftChessPieceMove;
-                    Vector2f newPosition2D = this.ConvertChessPositionTo2D(isRevertMove ? shiftChessPieceMove.FromPosition : shiftChessPieceMove.ToPosition);
+                    Vector2f newPosition2D = this.GetChessPiece2DPositionFrom(isRevertMove ? shiftChessPieceMove.FromPosition : shiftChessPieceMove.ToPosition);
 
                     concernedChessPiece2D.PlayPositionAnimation(this.animationShiftDuration, newPosition2D);
                 }
