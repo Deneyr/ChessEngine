@@ -8,7 +8,21 @@ namespace ChessInterface.Handlers
 {
     public abstract class AChessBoardSyncHandler: AChessBoardHandler
     {
-        public void SyncUpdateHandler()
+        public override void OnInterfaceAttached(ChessBoardInterface parentInterface)
+        {
+            base.OnInterfaceAttached(parentInterface);
+
+            parentInterface.InterfaceUpdating += this.OnInterfaceUpdating;
+        }
+
+        public override void OnInterfaceDetached(ChessBoardInterface parentInterface)
+        {
+            base.OnInterfaceDetached(parentInterface);
+
+            parentInterface.InterfaceUpdating -= this.OnInterfaceUpdating;
+        }
+
+        private void OnInterfaceUpdating(float deltaSec)
         {
             this.UpdateHandler();
         }

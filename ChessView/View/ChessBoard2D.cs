@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using ChessEngine;
 using ChessEngine.Maths;
 using ChessEngine.Moves;
+using ChessEngine.Players;
 
 namespace ChessView.View
 {
@@ -23,6 +24,8 @@ namespace ChessView.View
         private static Dictionary<ChessAssetType, Texture> chessAssetTypeToTextures;
 
         private Dictionary<ChessPiece, ChessPiece2D> chessPieceToObject2D;
+
+        private List<ChessPiece2D> possiblePromoteChessPiece2Ds;
 
         private ChessBoard chessBoard;
 
@@ -62,12 +65,44 @@ namespace ChessView.View
             this.chessBoard = chessBoard;
 
             this.chessPieceToObject2D = new Dictionary<ChessPiece, ChessPiece2D>();
+            this.possiblePromoteChessPiece2Ds = new List<ChessPiece2D>();
 
             this.chessBoard.NextTurnStarted += OnNextTurnStarted;
             this.chessBoard.PreviousTurnStarted += OnPreviousTurnStarted;
 
             this.chessBoard.MoveApplied += OnMoveApplied;
             this.chessBoard.MoveReverted += OnMoveReverted;
+        }
+
+        public void AddPossiblePromoteChessPiece2Ds(ChessPieceType toChessType, Vector2f startPosition)
+        {
+            this.possiblePromoteChessPiece2Ds.Add(new ChessPiece2D(this, toChessType, startPosition));
+        }
+
+        public void ClearPossiblePromoteChessPiece2Ds()
+        {
+            this.possiblePromoteChessPiece2Ds.Clear();
+        }
+
+        public ChessPiece2D GetPossiblePromoteChessPiece2DAt(Vector2f mousePosition)
+        {
+            ChessPiece2D resultChessPiece2D = null;
+
+            foreach(ChessPiece2D chessPiece2D in this.possiblePromoteChessPiece2Ds)
+            {
+                IntRect boundBox = new IntRect(
+                    (int)(chessPiece2D.Position.X - MODEL_2_VIEW_X / 2),
+                    (int)(chessPiece2D.Position.Y - MODEL_2_VIEW_Y / 2),
+                    (int)(MODEL_2_VIEW_X),
+                    (int)(MODEL_2_VIEW_Y));
+
+                if(boundBox.Contains((int) mousePosition.X, (int) mousePosition.Y))
+                {
+                    resultChessPiece2D = chessPiece2D;
+                }
+            }
+
+            return resultChessPiece2D;
         }
 
         public ChessPiece2D GetChessPiece2DAt(Vector2f positionOnScreen)
@@ -83,6 +118,11 @@ namespace ChessView.View
             return null;
         }
 
+        public bool AnyPossiblePromoteChessPiece2Ds()
+        {
+            return this.possiblePromoteChessPiece2Ds.Any();
+        }
+
         public void DrawIn(RenderWindow window, Time deltaTime)
         {
             //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
@@ -96,6 +136,11 @@ namespace ChessView.View
             base.DrawIn(window);
 
             foreach(IObject2D object2D in this.chessPieceToObject2D.Values)
+            {
+                object2D.DrawIn(window);
+            }
+
+            foreach(IObject2D object2D in this.possiblePromoteChessPiece2Ds)
             {
                 object2D.DrawIn(window);
             }

@@ -14,8 +14,10 @@ namespace ChessInterface.Handlers
         ChessBoardInterface ParentInterface
         {
             get;
-            set;
         }
+
+        void OnInterfaceAttached(ChessBoardInterface parentInterface);
+        void OnInterfaceDetached(ChessBoardInterface parentInterface);
 
         void OnChessGameStarting();
 

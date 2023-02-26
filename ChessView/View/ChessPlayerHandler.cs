@@ -1,5 +1,8 @@
-﻿using ChessEngine.ChessModels.Monitors;
+﻿using ChessEngine;
+using ChessEngine.ChessModels.Monitors;
 using ChessEngine.Maths;
+using ChessEngine.Moves;
+using ChessEngine.Players;
 using ChessInterface.Events;
 using ChessInterface.Handlers;
 using SFML.System;
@@ -17,16 +20,90 @@ namespace ChessView.View
 
         private ChessPiece2D selectedChessPiece;
 
+        private ChessPiece promotingChessPiece;
+
         public ChessPlayerHandler(ChessBoard2D parentChessBoard2D)
         {
             this.parentChessBoard2D = parentChessBoard2D;
 
             this.selectedChessPiece = null;
+            this.promotingChessPiece = null;
         }
 
         protected override void InternalHandleChessEvent(ChessEvent chessEvent)
         {
+            if(chessEvent.EventType == ChessEventType.MOVE_APPLIED
+                || chessEvent.EventType == ChessEventType.MOVE_REVERTED)
+            {
+                int currentIndexPlayer = this.internalChessBoard.CurrentChessTurn.IndexPlayer;
+                IPlayer currentInternalPlayer = this.internalChessBoard.Players[currentIndexPlayer];
+                IPlayer currentPlayer = this.chessBoardsReferenceManager.GetOriginFromDestination(currentInternalPlayer);
 
+                if (currentPlayer == this.ParentInterface.SupportedPlayer)
+                {
+                    ChessPiece concernedChessPiece = this.chessBoardsReferenceManager.GetDestinationFromOrigin(chessEvent.EventMove.ConcernedChessPiece);
+                    if (concernedChessPiece.ChessPieceType == ChessPieceType.PAWN)
+                    {
+                        List<ChessPieceMovesContainer> possibleMoves = concernedChessPiece.GetAllPossibleMoves(this.internalChessBoard);
+
+                        if (possibleMoves != null)
+                        {
+                            List<IChessPieceMove> promoteChessMoves = possibleMoves
+                                .Select(pElem => pElem.ChessPieceMoves.FirstOrDefault())
+                                .Where(pElem => pElem is PromoteChessPieceMove).ToList();
+
+                            if (promoteChessMoves.Any())
+                            {
+                                ShiftChessPieceMove shiftChessPieceMove = (chessEvent.EventMove as ChessPieceMovesContainer).ChessPieceMoves.FirstOrDefault() as ShiftChessPieceMove;
+                                this.createPossiblePromoteChessPiece2D(concernedChessPiece, shiftChessPieceMove.ToPosition, promoteChessMoves);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void createPossiblePromoteChessPiece2D(ChessPiece promotingChessPiece, ChessPiecePosition toPosition, List<IChessPieceMove> promoteChessMoves)
+        {
+            this.parentChessBoard2D.ClearPossiblePromoteChessPiece2Ds();
+
+            toPosition = ClampPositionToBoard(toPosition, promoteChessMoves.Count);
+            Vector2f position = this.parentChessBoard2D.ConvertChessPositionTo2D(toPosition);
+
+            this.promotingChessPiece = promotingChessPiece;
+
+            int i = 0;
+            float halfPromoteMoveCount = promoteChessMoves.Count / 2f;
+            foreach (PromoteChessPieceMove promoteChessMove in promoteChessMoves)
+            {
+                this.parentChessBoard2D.AddPossiblePromoteChessPiece2Ds(promoteChessMove.ToChessType, new Vector2f(position.X + ChessBoard2D.MODEL_2_VIEW_X, position.Y + ChessBoard2D.MODEL_2_VIEW_Y * (i + 1)));
+                i++;
+            }
+        }
+
+        private ChessPiecePosition ClampPositionToBoard(ChessPiecePosition toPosition, int nbPromoteMoveCount)
+        {
+            ChessPiecePosition resultPosition = toPosition;
+
+            if (resultPosition.X < 0)
+            {
+                resultPosition.X = 0;
+            }
+            else if(resultPosition.X > this.internalChessBoard.Width - 2)
+            {
+                resultPosition.X = this.internalChessBoard.Width - 2;
+            }
+
+            if(resultPosition.Y < 0)
+            {
+                resultPosition.Y = 0;
+            }
+            else if(resultPosition.Y + nbPromoteMoveCount > this.internalChessBoard.Height)
+            {
+                resultPosition.Y = 7 - nbPromoteMoveCount;
+            }
+
+            return resultPosition;
         }
 
         internal void OnMouseMoved(object sender, SFML.Window.MouseMoveEventArgs e)
@@ -51,6 +128,18 @@ namespace ChessView.View
                     this.ParentInterface.EnqueueChessMoveInfluence(this.selectedChessPiece.ChessPiece, new ShiftChessMoveInfluence(toPosition));
 
                     this.selectedChessPiece = null;
+                }
+                else if (this.parentChessBoard2D.AnyPossiblePromoteChessPiece2Ds())
+                {
+                    ChessPiece2D chessPiece2DSelected = this.parentChessBoard2D.GetPossiblePromoteChessPiece2DAt(new Vector2f(e.X, e.Y));
+
+                    if(chessPiece2DSelected != null)
+                    {
+                        this.ParentInterface.EnqueueChessMoveInfluence(this.chessBoardsReferenceManager.GetOriginFromDestination(this.promotingChessPiece), new PromoteChessMoveInfluence(chessPiece2DSelected.ChessType));
+
+                        this.promotingChessPiece = null;
+                        this.parentChessBoard2D.ClearPossiblePromoteChessPiece2Ds();
+                    }
                 }
             }
         }

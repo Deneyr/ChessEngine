@@ -12,13 +12,16 @@ using System.Threading.Tasks;
 
 namespace ChessInterface
 {
-    public class ChessBoardInterface
+    public class ChessBoardInterface: IDisposable
     {
         private readonly object interfaceLock = new object();
 
         private ChessBoard chessBoard;
 
         private IChessBoardHandler chessBoardHandler;
+
+        public event Action<float> InterfaceUpdating;
+        public event Action<float> InterfaceUpdated;
 
         public IPlayer SupportedPlayer
         {
@@ -37,7 +40,7 @@ namespace ChessInterface
 
             this.chessBoardHandler = chessBoardHandler;
             this.SupportedPlayer = null;
-            this.chessBoardHandler.ParentInterface = this;
+            this.chessBoardHandler.OnInterfaceAttached(this);
 
             this.influencesEmitted = new Queue<Tuple<ChessPiece, IChessMoveInfluence>>();
             this.influenceMinTimerSec = influenceMinTimerSec;
@@ -144,6 +147,8 @@ namespace ChessInterface
 
         public void UpdateInterface(float deltaSec)
         {
+            this.InterfaceUpdating?.Invoke(deltaSec);
+
             if (this.influenceMinTimerSec > 0)
             {
                 this.influenceCurrentTimerSec += deltaSec;
@@ -157,6 +162,8 @@ namespace ChessInterface
                     this.chessBoard.ComputeChessPieceInfluence(concernedChessPiece, chessMoveInfluence);
                 }
             }
+
+            this.InterfaceUpdated?.Invoke(deltaSec);
         }
 
         private bool DequeueChessEvent(out ChessPiece concernedChessPiece, out IChessMoveInfluence chessMoveInfluence)
@@ -186,21 +193,9 @@ namespace ChessInterface
             }
         }
 
-        //internal bool DequeueChessEvent(out ChessEvent chessEvent)
-        //{
-        //    chessEvent = new ChessEvent();
-        //    bool result = false;
-
-        //    if (this.inputEvents.Any())
-        //    {
-        //        lock (this.interfaceLock)
-        //        {
-        //            chessEvent = this.inputEvents.Dequeue();
-        //            result = true;
-        //        }
-        //    }
-
-        //    return result;
-        //}
+        public void Dispose()
+        {
+            this.chessBoardHandler.OnInterfaceDetached(this);
+        }
     }
 }

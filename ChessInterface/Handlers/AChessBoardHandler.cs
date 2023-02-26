@@ -17,7 +17,7 @@ namespace ChessInterface.Handlers
         public ChessBoardInterface ParentInterface
         {
             get;
-            set;
+            private set;
         }
 
         protected ChessBoard internalChessBoard;
@@ -135,6 +135,16 @@ namespace ChessInterface.Handlers
         public virtual void Dispose()
         {
 
+        }
+
+        public virtual void OnInterfaceAttached(ChessBoardInterface parentInterface)
+        {
+            this.ParentInterface = parentInterface;
+        }
+
+        public virtual void OnInterfaceDetached(ChessBoardInterface parentInterface)
+        {
+            this.ParentInterface = null;
         }
     }
 }
