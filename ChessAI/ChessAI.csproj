@@ -47,6 +47,11 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomAI\RandomAIHandler.cs" />
+    <Compile Include="BruteForceAI\BruteForceAI.cs" />
+    <Compile Include="BruteForceAI\MoveTree\AMoveComponent.cs" />
+    <Compile Include="BruteForceAI\MoveTree\MoveComposite.cs" />
+    <Compile Include="BruteForceAI\MoveTree\MoveLeaf.cs" />
+    <Compile Include="BruteForceAI\MoveTree\MoveRoot.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

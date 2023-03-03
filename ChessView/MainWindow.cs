@@ -1,3 +1,4 @@
+using ChessAI.BruteForceAI;
 using ChessAI.RandomAI;
 using ChessEngine;
 using ChessEngine.ChessModels.Monitors;
@@ -42,7 +43,7 @@ namespace ChessView
             var window = new RenderWindow(mode, "Chess view");
             window.SetVerticalSyncEnabled(false);
 
-            this.TestInitChessBoardGame(window, this.chessBoard);
+            this.InitChessBoardGame(window, this.chessBoard);
             this.chessBoard.InitFirstTurn();
 
             window.KeyPressed += Window_KeyPressed;
@@ -88,7 +89,7 @@ namespace ChessView
 
         private void InitChessBoardGame(RenderWindow window, ChessBoard chessBoard)
         {
-            RandomAIHandler handler = new RandomAIHandler();
+            BruteForceAI handler = new BruteForceAI();
             ChessPlayerHandler chessPlayerHandler = new ChessPlayerHandler(this.chessBoard2D);
 
             this.playerInterface2 = new ChessBoardInterface(handler, 1f);
