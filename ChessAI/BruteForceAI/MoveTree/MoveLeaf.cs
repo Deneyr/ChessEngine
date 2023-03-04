@@ -39,8 +39,11 @@ namespace ChessAI.BruteForceAI.MoveTree
             //    this.mFitnessPlayer2 = 1;
             //}
 
-            this.postFitnessesByPlayers = this.CopyPreFitnesses(out float preTotalFitnesses);
-            this.postTotalFistnesses = preTotalFitnesses;
+            //this.postFitnessesByPlayers = this.CopyPreFitnesses(out float preTotalFitnesses);
+            //this.postTotalFistnesses = preTotalFitnesses;
+
+            this.ComputeEnteringFitness(chessBoard);
+            this.PostFitnessComputed = true;
         }
 
         public override AMoveComponent GetNextChild()

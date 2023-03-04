@@ -56,7 +56,10 @@ namespace ChessInterface.Handlers
             {
                 IChessMoveInfluence moveInfluence = chessEvent.EventMove.CreateInfluence();
 
-                this.internalChessBoard.ComputeChessPieceInfluence(this.chessBoardsReferenceManager.GetDestinationFromOrigin(chessEvent.EventMove.ConcernedChessPiece), moveInfluence);
+                if(this.internalChessBoard.ComputeChessPieceInfluence(this.chessBoardsReferenceManager.GetDestinationFromOrigin(chessEvent.EventMove.ConcernedChessPiece), moveInfluence) == false)
+                {
+                    throw new Exception("Desync between chess board and internal chess board");
+                }
             }
             else if(chessEvent.EventType == ChessEventType.MOVE_REVERTED)
             {

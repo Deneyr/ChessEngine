@@ -358,8 +358,8 @@ namespace ChessEngine
 
             IPlayer currentPlayer = this.Players[this.CurrentChessTurn.IndexPlayer];
 
-            newTurn.IsCurrentKingChecked = this.IsKingChecked(currentPlayer.KingChessPiece);
-            newTurn.CanPlayerMoveChessPieces = this.CanPlayerMoveChessPieces();
+            //newTurn.IsCurrentKingChecked = this.IsKingChecked(currentPlayer.KingChessPiece);
+            //newTurn.CanPlayerMoveChessPieces = this.CanPlayerMoveChessPieces();
 
             this.NextTurnStarted?.Invoke(currentChessTurn);
         }
@@ -405,7 +405,7 @@ namespace ChessEngine
             }
         }
 
-        private bool IsKingChecked(ChessPiece king)
+        public bool IsKingChecked(ChessPiece king)
         {
             if (king != null)
             {
@@ -443,7 +443,7 @@ namespace ChessEngine
             return false;
         }
 
-        private bool CanPlayerMoveChessPieces()
+        public bool CanPlayerMoveChessPieces()
         {
             IPlayer currentPlayer = this.Players[this.CurrentChessTurn.IndexPlayer];
 

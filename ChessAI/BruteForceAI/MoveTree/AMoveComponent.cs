@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ChessAI.BruteForceAI.MoveTree
 {
-    public abstract class AMoveComponent: IDisposable
+    public abstract class AMoveComponent
     {
         protected int currentIndexPlayer;
 
@@ -20,10 +20,18 @@ namespace ChessAI.BruteForceAI.MoveTree
         //protected float mFitnessPlayer1;
         //protected float mFitnessPlayer2;
 
-        protected List<float> preFitnessesByPlayers;
-        protected List<float> postFitnessesByPlayers;
-        protected float preTotalFistnesses;
-        protected float postTotalFistnesses;
+        //protected List<float> preFitnessesByPlayers;
+        //protected List<float> postFitnessesByPlayers;
+        //protected float preTotalFistnesses;
+        //protected float postTotalFistnesses;
+
+        protected float fitnessForFirstPlayer;
+
+        public bool PostFitnessComputed
+        {
+            get;
+            protected set;
+        }
 
         public virtual int Depth
         {
@@ -41,8 +49,10 @@ namespace ChessAI.BruteForceAI.MoveTree
 
             this.mCommand = pCommand;
 
-            this.preFitnessesByPlayers = new List<float>();
-            this.postFitnessesByPlayers = new List<float>();
+            //this.preFitnessesByPlayers = new List<float>();
+            //this.postFitnessesByPlayers = new List<float>();
+
+            this.PostFitnessComputed = false;
 
             if (pParent != null)
             {
@@ -56,25 +66,35 @@ namespace ChessAI.BruteForceAI.MoveTree
 
         //public float FitnessPlayer1 { get => mFitnessPlayer1; set => mFitnessPlayer1 = value; }
         //public float FitnessPlayer2 { get => mFitnessPlayer2; set => mFitnessPlayer2 = value; }
-        public float PreFitnessForCurrentPlayer
+        //public float PreFitnessForCurrentPlayer
+        //{
+        //    get
+        //    {
+        //        float fitnessCurrentPlayer = this.preFitnessesByPlayers[this.currentIndexPlayer];
+        //        float fitnessOtherPlayers = (this.preTotalFistnesses - fitnessCurrentPlayer) / (this.preFitnessesByPlayers.Count - 1);
+
+        //        return fitnessCurrentPlayer - fitnessOtherPlayers;
+        //    }
+        //}
+
+        public float PostFitnessForFirstPlayer
         {
             get
             {
-                float fitnessCurrentPlayer = this.preFitnessesByPlayers[this.currentIndexPlayer];
-                float fitnessOtherPlayers = (this.preTotalFistnesses - fitnessCurrentPlayer) / (this.preFitnessesByPlayers.Count - 1);
-
-                return fitnessCurrentPlayer - fitnessOtherPlayers;
+                return this.fitnessForFirstPlayer;
             }
         }
+
 
         public float PostFitnessForCurrentPlayer
         {
             get
             {
-                float fitnessCurrentPlayer = this.postFitnessesByPlayers[this.currentIndexPlayer];
-                float fitnessOtherPlayers = (this.postTotalFistnesses - fitnessCurrentPlayer) / (this.postFitnessesByPlayers.Count - 1);
+                //float fitnessCurrentPlayer = this.postFitnessesByPlayers[this.currentIndexPlayer];
+                //float fitnessOtherPlayers = (this.postTotalFistnesses - fitnessCurrentPlayer) / (this.postFitnessesByPlayers.Count - 1);
 
-                return fitnessCurrentPlayer - fitnessOtherPlayers;
+                //return fitnessCurrentPlayer - fitnessOtherPlayers;
+                return this.GetFitnessForCurrentPlayer(this.fitnessForFirstPlayer);
             }
         }
 
@@ -90,6 +110,15 @@ namespace ChessAI.BruteForceAI.MoveTree
             {
                 return null;
             }
+        }
+
+        public float GetFitnessForCurrentPlayer(float fitnessForFirstPlayer)
+        {
+            if (this.currentIndexPlayer != 0)
+            {
+                return -fitnessForFirstPlayer;
+            }
+            return fitnessForFirstPlayer;
         }
 
         public virtual void CreateChildren(ChessBoard chessBoard)
@@ -108,39 +137,60 @@ namespace ChessAI.BruteForceAI.MoveTree
         //    return pGameArea;
         //}
 
-        public virtual void ComputeEnteringFitness(ChessBoard chessBoard)
+        public void AlphaBetaPruning()
         {
-            this.preTotalFistnesses = 0;
-            for (int i = 0; i < chessBoard.Players.Count; i++)
+            AMoveComponent parentNode = this.mParent;
+            AMoveComponent grandPaNode = null;
+            if(parentNode != null)
             {
-                float fitness = this.ComputeFitnessOfPlayer(chessBoard, i);
+                grandPaNode = parentNode.mParent;
+            }
 
-                this.preFitnessesByPlayers.Add(fitness);
-
-                this.preTotalFistnesses += fitness;
+            if(grandPaNode != null
+                && parentNode.currentIndexPlayer != grandPaNode.currentIndexPlayer)
+            {
+                if (grandPaNode.IsPruningAvailableFor(this.fitnessForFirstPlayer))
+                {
+                    parentNode.PruneAllChildrenExcept(this);
+                }
             }
         }
 
-        public List<float> CopyPostFitnesses(out float postTotalFitnesses)
+        public virtual void ComputeEnteringFitness(ChessBoard chessBoard)
         {
-            postTotalFitnesses = this.postTotalFistnesses;
-            //return new List<float>(this.postFitnessesByPlayers);
-            return this.postFitnessesByPlayers;
+            //this.preTotalFistnesses = 0;
+            //for (int i = 0; i < chessBoard.Players.Count; i++)
+            //{
+            //    float fitness = this.ComputeFitnessOfPlayer(chessBoard, i);
+
+            //    this.preFitnessesByPlayers.Add(fitness);
+
+            //    this.preTotalFistnesses += fitness;
+            //}
+
+            this.fitnessForFirstPlayer = this.ComputeFitnessOfPlayer(chessBoard, 0) - this.ComputeFitnessOfPlayer(chessBoard, 1);
         }
 
-        public List<float> CopyPreFitnesses(out float preTotalFitnesses)
-        {
-            preTotalFitnesses = this.preTotalFistnesses;
-            //return new List<float>(this.preFitnessesByPlayers);
-            return this.preFitnessesByPlayers;
-        }
+        //public List<float> CopyPostFitnesses(out float postTotalFitnesses)
+        //{
+        //    postTotalFitnesses = this.postTotalFistnesses;
+        //    //return new List<float>(this.postFitnessesByPlayers);
+        //    return this.postFitnessesByPlayers;
+        //}
+
+        //public List<float> CopyPreFitnesses(out float preTotalFitnesses)
+        //{
+        //    preTotalFitnesses = this.preTotalFistnesses;
+        //    //return new List<float>(this.preFitnessesByPlayers);
+        //    return this.preFitnessesByPlayers;
+        //}
 
         protected virtual float ComputeFitnessOfPlayer(ChessBoard chessBoard, int playerIndex)
         {
             ChessTurn currentChessTurn = chessBoard.CurrentChessTurn;
-            if (currentChessTurn.CanPlayerMoveChessPieces == false)
+            if (chessBoard.CanPlayerMoveChessPieces() == false)
             {
-                if (currentChessTurn.IsCurrentKingChecked
+                if (chessBoard.IsKingChecked(chessBoard.Players[playerIndex].KingChessPiece)
                     && currentChessTurn.IndexPlayer == playerIndex)
                 {
                     return -1000000f;
@@ -165,6 +215,16 @@ namespace ChessAI.BruteForceAI.MoveTree
             return resultFitness;
         }
 
+        protected virtual void PruneAllChildrenExcept(AMoveComponent moveComponent)
+        {
+
+        }
+
+        protected virtual bool IsPruningAvailableFor(float fitnessFirstPlayer)
+        {
+            return false;
+        }
+
         private float ChessPieceTypeToValue(ChessPieceType chessPieceType)
         {
             switch (chessPieceType)
@@ -183,16 +243,6 @@ namespace ChessAI.BruteForceAI.MoveTree
                     return 20;
             }
             return 1;
-        }
-
-        protected virtual void SortChildren()
-        {
-
-        }
-
-        public void Dispose()
-        {
-            this.mParent = null;
         }
     }
 }

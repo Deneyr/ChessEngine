@@ -30,17 +30,17 @@ namespace ChessEngine
             private set;
         }
 
-        public bool IsCurrentKingChecked
-        {
-            get;
-            internal set;
-        }
+        //public bool IsCurrentKingChecked
+        //{
+        //    get;
+        //    internal set;
+        //}
 
-        public bool CanPlayerMoveChessPieces
-        {
-            get;
-            internal set;
-        }
+        //public bool CanPlayerMoveChessPieces
+        //{
+        //    get;
+        //    internal set;
+        //}
 
         public ChessTurn(int indexPlayer)
         {
@@ -48,8 +48,8 @@ namespace ChessEngine
 
             this.TurnMoves = new List<ChessPieceMovesContainer>();
 
-            this.IsCurrentKingChecked = false;
-            this.CanPlayerMoveChessPieces = true;
+            //this.IsCurrentKingChecked = false;
+            //this.CanPlayerMoveChessPieces = true;
         }
     }
 }

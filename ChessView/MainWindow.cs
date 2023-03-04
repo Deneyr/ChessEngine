@@ -90,6 +90,7 @@ namespace ChessView
         private void InitChessBoardGame(RenderWindow window, ChessBoard chessBoard)
         {
             BruteForceAI handler = new BruteForceAI();
+            //RandomAIHandler handler = new RandomAIHandler();
             ChessPlayerHandler chessPlayerHandler = new ChessPlayerHandler(this.chessBoard2D);
 
             this.playerInterface2 = new ChessBoardInterface(handler, 1f);
@@ -188,11 +189,12 @@ namespace ChessView
 
         private void TestInitChessBoardGame(RenderWindow window, ChessBoard chessBoard)
         {
-            RandomAIHandler handler = new RandomAIHandler();
+            BruteForceAI handler = new BruteForceAI();
+            //RandomAIHandler handler = new RandomAIHandler();
             ChessPlayerHandler chessPlayerHandler = new ChessPlayerHandler(this.chessBoard2D);
 
-            this.playerInterface2 = new ChessBoardInterface(chessPlayerHandler, 1f);
-            this.playerInterface1 = new ChessBoardInterface(handler, 1f);
+            this.playerInterface2 = new ChessBoardInterface(handler, 1f);
+            this.playerInterface1 = new ChessBoardInterface(chessPlayerHandler, 1f);
 
             window.MouseButtonPressed += chessPlayerHandler.OnMouseButtonPressed;
             window.MouseButtonReleased += chessPlayerHandler.OnMouseButtonReleased;
@@ -214,16 +216,11 @@ namespace ChessView
 
             // Chess pieces player 1
             // Position is compute from the top left corner of the board, starting from 0
-            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(2, 3));
-            chessBoard.AddChessPiece(chessPiece);
-
-            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.PAWN, new ChessPiecePosition(7, 6));
+            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.KNIGHT, new ChessPiecePosition(3, 4));
             chessBoard.AddChessPiece(chessPiece);
 
             // Chess pieces player 2
-            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.PAWN, new ChessPiecePosition(7, 2));
-            chessBoard.AddChessPiece(chessPiece);
-            chessPiece = chessBoard.CreateChessPiece(player1, ChessPieceType.KNIGHT, new ChessPiecePosition(6, 7));
+            chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.BISHOP, new ChessPiecePosition(2, 2));
             chessBoard.AddChessPiece(chessPiece);
 
             //chessPiece = chessBoard.CreateChessPiece(player2, ChessPieceType.BISHOP, new ChessPiecePosition(1, 5));

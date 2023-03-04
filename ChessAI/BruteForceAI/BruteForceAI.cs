@@ -59,6 +59,8 @@ namespace ChessAI.BruteForceAI
             AMoveComponent lCurrentComponent = lMoveRoot;
             AMoveComponent lNextComponent;
 
+            float turnState = this.CurrentBoardTurnState(this.internalChessBoard);
+
             //System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
             //stopWatch.Start();
             lCurrentComponent.CreateChildren(this.internalChessBoard);
@@ -80,6 +82,7 @@ namespace ChessAI.BruteForceAI
                 else
                 {
                     lCurrentComponent.ComputeFitnessAndClean(this.internalChessBoard);
+                    lCurrentComponent.AlphaBetaPruning();
 
                     //this.mGameArea.SetFromSnapshot(lCurrentComponent.Parent.GameAreaData);
                     this.internalChessBoard.RevertLastChessMove();
@@ -99,7 +102,19 @@ namespace ChessAI.BruteForceAI
                 lCurrentComponent = lCurrentComponent.BestChild;
             }
 
+            float turnStateAfter = this.CurrentBoardTurnState(this.internalChessBoard);
+            if(turnState != turnStateAfter)
+            {
+                throw new Exception("Alteration of the internal chessBoard during bruteForce forbidden");
+            }
+
             return lResult;
+        }
+
+        // TEST TO REMOVE
+        private float CurrentBoardTurnState(ChessEngine.ChessBoard chessBoard)
+        {
+            return chessBoard.ChessTurns.Count + chessBoard.CurrentChessTurn.TurnMoves.Count / 10f;
         }
     }
 }
