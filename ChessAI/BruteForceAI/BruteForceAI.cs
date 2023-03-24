@@ -22,11 +22,7 @@ namespace ChessAI.BruteForceAI
 
         protected override void InternalHandleChessEvent(ChessEvent chessEvent)
         {
-            int currentIndexPlayer = this.internalChessBoard.CurrentChessTurn.IndexPlayer;
-            IPlayer currentInternalPlayer = this.internalChessBoard.Players[currentIndexPlayer];
-            IPlayer currentPlayer = this.chessBoardsReferenceManager.GetOriginFromDestination(currentInternalPlayer);
-
-            if (currentPlayer == this.ParentInterface.SupportedPlayer)
+            if (this.CanEmitInfluence(chessEvent))
             {
                 List<ChessPieceMovesContainer> bestMoves = this.GetBestMoves();
 
