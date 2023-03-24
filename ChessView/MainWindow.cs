@@ -1,4 +1,4 @@
-using ChessAI.BruteForceAI;
+using ChessAI.AStarAI;
 using ChessAI.RandomAI;
 using ChessEngine;
 using ChessEngine.ChessModels.Monitors;
@@ -89,7 +89,7 @@ namespace ChessView
 
         private void InitChessBoardGame(RenderWindow window, ChessBoard chessBoard)
         {
-            BruteForceAI handler = new BruteForceAI();
+            AStarAI handler = new AStarAI();
             //RandomAIHandler handler = new RandomAIHandler();
             ChessPlayerHandler chessPlayerHandler = new ChessPlayerHandler(this.chessBoard2D);
 
@@ -189,7 +189,7 @@ namespace ChessView
 
         private void TestInitChessBoardGame(RenderWindow window, ChessBoard chessBoard)
         {
-            BruteForceAI handler = new BruteForceAI();
+            AStarAI handler = new AStarAI();
             //RandomAIHandler handler = new RandomAIHandler();
             ChessPlayerHandler chessPlayerHandler = new ChessPlayerHandler(this.chessBoard2D);
 

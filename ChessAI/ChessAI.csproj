@@ -52,6 +52,11 @@
     <Compile Include="BruteForceAI\MoveTree\MoveComposite.cs" />
     <Compile Include="BruteForceAI\MoveTree\MoveLeaf.cs" />
     <Compile Include="BruteForceAI\MoveTree\MoveRoot.cs" />
+    <Compile Include="AStarAI\AStarAI.cs" />
+    <Compile Include="AStarAI\MoveTree\AMoveComponent.cs" />
+    <Compile Include="AStarAI\MoveTree\MoveComposite.cs" />
+    <Compile Include="AStarAI\MoveTree\MoveLeaf.cs" />
+    <Compile Include="AStarAI\MoveTree\MoveRoot.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -157,7 +157,7 @@ namespace ChessInterface
             if (this.influenceMinTimerSec <= 0
                 || this.influenceCurrentTimerSec > this.influenceMinTimerSec)
             {
-                if (this.DequeueChessEvent(out ChessPiece concernedChessPiece, out IChessMoveInfluence chessMoveInfluence))
+                if (this.DequeueChessInfluence(out ChessPiece concernedChessPiece, out IChessMoveInfluence chessMoveInfluence))
                 {
                     this.chessBoard.ComputeChessPieceInfluence(concernedChessPiece, chessMoveInfluence);
                 }
@@ -166,7 +166,7 @@ namespace ChessInterface
             this.InterfaceUpdated?.Invoke(deltaSec);
         }
 
-        private bool DequeueChessEvent(out ChessPiece concernedChessPiece, out IChessMoveInfluence chessMoveInfluence)
+        private bool DequeueChessInfluence(out ChessPiece concernedChessPiece, out IChessMoveInfluence chessMoveInfluence)
         {
             chessMoveInfluence = null;
             concernedChessPiece = null;

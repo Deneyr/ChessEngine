@@ -23,11 +23,7 @@ namespace ChessAI.RandomAI
 
         protected override void InternalHandleChessEvent(ChessEvent chessEvent)
         {
-            int currentIndexPlayer = this.internalChessBoard.CurrentChessTurn.IndexPlayer;
-            IPlayer currentInternalPlayer = this.internalChessBoard.Players[currentIndexPlayer];
-            IPlayer currentPlayer = this.chessBoardsReferenceManager.GetOriginFromDestination(currentInternalPlayer);
-
-            if (currentPlayer == this.ParentInterface.SupportedPlayer)
+            if (this.CanEmitInfluence(chessEvent))
             {
                 ChessPieceMovesContainer randomMove = this.GetCurrentRandomMove();
 

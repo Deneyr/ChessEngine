@@ -45,6 +45,25 @@ namespace ChessInterface.Handlers
 
         protected abstract void InternalHandleChessEvent(ChessEvent chessEvent);
 
+        protected bool CanEmitInfluence(ChessEvent chessEvent)
+        {
+            if(chessEvent.EventType == ChessEventType.NEXT_TURN 
+                || chessEvent.EventType == ChessEventType.PREVIOUS_TURN)
+            {
+                if (this.internalChessBoard.ChessTurns.Count > 1
+                    || this.internalChessBoard.CurrentChessTurn.TurnMoves.Count == 0)
+                {
+                    return false;
+                }
+            }
+
+            int currentIndexPlayer = this.internalChessBoard.CurrentChessTurn.IndexPlayer;
+            IPlayer currentInternalPlayer = this.internalChessBoard.Players[currentIndexPlayer];
+            IPlayer currentPlayer = this.chessBoardsReferenceManager.GetOriginFromDestination(currentInternalPlayer);
+
+            return currentPlayer == this.ParentInterface.SupportedPlayer;
+        }
+
         private void UpdateInternalChessBoard(ChessEvent chessEvent)
         {
             if(chessEvent.EventType == ChessEventType.NEXT_TURN
